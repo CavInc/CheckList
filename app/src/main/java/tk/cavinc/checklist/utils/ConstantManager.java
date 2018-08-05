@@ -5,4 +5,5 @@ package tk.cavinc.checklist.utils;
  */
 
 public interface ConstantManager {
+    String WORK_DATA = "WORK_DATA";
 }
