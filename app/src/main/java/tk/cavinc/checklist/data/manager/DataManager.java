@@ -7,6 +7,7 @@ import android.os.Environment;
 
 import java.io.File;
 
+import tk.cavinc.checklist.data.database.DBConnect;
 import tk.cavinc.checklist.utils.App;
 
 /**
@@ -18,6 +19,7 @@ public class DataManager {
 
     private Context mContext;
     private PrefManager mPrefManager;
+    private DBConnect mDB;
 
     public static DataManager getInstance() {
         if (INSTANCE==null){
@@ -29,7 +31,7 @@ public class DataManager {
     public DataManager(){
         mContext = App.getContext();
         mPrefManager = new PrefManager();
-        //mDB = new DBConnect(mContext);
+        mDB = new DBConnect(mContext);
     }
 
     public Context getContext() {
@@ -40,6 +42,9 @@ public class DataManager {
         return mPrefManager;
     }
 
+    public DBConnect getDB() {
+        return mDB;
+    }
 
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {

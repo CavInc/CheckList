@@ -32,6 +32,7 @@ import tk.cavinc.checklist.utils.ConstantManager;
 public class QuestionActivity extends AppCompatActivity {
     private DataManager mDataManager;
     private String mDateCheck;
+    private String mTime;
 
     private ExpandableListView mExpandList;
     private CustomExpandListAdapter adapter;
@@ -43,6 +44,7 @@ public class QuestionActivity extends AppCompatActivity {
         mDataManager = DataManager.getInstance();
 
         mDateCheck = getIntent().getStringExtra(ConstantManager.WORK_DATA);
+        mTime = getIntent().getStringExtra(ConstantManager.WORK_TIME);
 
         mExpandList = findViewById(R.id.expond_question);
 
@@ -55,7 +57,7 @@ public class QuestionActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Опрос: "+mDateCheck);
+            actionBar.setTitle("Опрос: "+mDateCheck+"  ::  "+mTime);
         }
     }
 

@@ -2,13 +2,17 @@
 <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="8dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/ligth"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@+id/elg_name"
         android:text="Наименование группы"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:paddingLeft="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
