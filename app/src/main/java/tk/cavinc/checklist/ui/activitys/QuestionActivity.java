@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import org.json.JSONArray;
@@ -29,7 +31,7 @@ import tk.cavinc.checklist.utils.ConstantManager;
 //http://abhiandroid.com/ui/expandablelistadapter-example-android.html
 // https://stackoverflow.com/questions/5188196/how-to-write-custom-expandablelistadapter - тоже самое
 
-public class QuestionActivity extends AppCompatActivity {
+public class QuestionActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener{
     private static final String TAG = "QA";
     private DataManager mDataManager;
     private String mDateCheck;
@@ -50,6 +52,7 @@ public class QuestionActivity extends AppCompatActivity {
         mTag = Integer.parseInt(getIntent().getStringExtra(ConstantManager.WORK_ID_TAG));
 
         mExpandList = findViewById(R.id.expond_question);
+        mExpandList.setOnItemLongClickListener(this);
 
         costructData();
 
@@ -153,4 +156,9 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Log.d(TAG,"POS :"+position);
+        return false;
+    }
 }
