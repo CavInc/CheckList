@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CheckList</string>
+    <string name="dialog_close">Закрыть</string>
+    <string name="dialog_ok">Ок</string>
 </resources>

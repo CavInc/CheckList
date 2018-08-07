@@ -24,6 +24,7 @@ import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
 import tk.cavinc.checklist.data.models.CheckModel;
 import tk.cavinc.checklist.ui.adapters.CustomExpandListAdapter;
+import tk.cavinc.checklist.ui.dialogs.CommentDialog;
 import tk.cavinc.checklist.utils.ConstantManager;
 
 //https://sohabr.net/post/227549/   - а вот тут то что надо
@@ -169,7 +170,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.d(TAG,"POS :"+position);
-
+        CommentDialog dialog = new CommentDialog();
+        dialog.show(getFragmentManager(),"CD");
         return true;
     }
 
