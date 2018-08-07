@@ -43,10 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        String cp = ((Button) v).getText().toString();
+        Button bt = (Button) v;
+        String cp = bt.getText().toString();
+        Object tag = bt.getTag();
+
         Intent intent = new Intent(this,QuestionActivity.class);
         intent.putExtra(ConstantManager.WORK_DATA,mTextView.getText().toString());
         intent.putExtra(ConstantManager.WORK_TIME,cp);
+        intent.putExtra(ConstantManager.WORK_ID_TAG,tag.toString());
         startActivity(intent);
     }
 

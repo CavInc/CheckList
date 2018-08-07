@@ -2,7 +2,8 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -13,4 +14,14 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"/>
+    <LinearLayout
+        android:id="@+id/expant_list_item_lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/expant_list_item_name2"
+            tools:text="А тут надпись для тех у которых должно быть фото"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 </LinearLayout>

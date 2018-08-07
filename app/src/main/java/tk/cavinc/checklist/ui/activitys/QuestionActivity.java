@@ -30,9 +30,11 @@ import tk.cavinc.checklist.utils.ConstantManager;
 // https://stackoverflow.com/questions/5188196/how-to-write-custom-expandablelistadapter - тоже самое
 
 public class QuestionActivity extends AppCompatActivity {
+    private static final String TAG = "QA";
     private DataManager mDataManager;
     private String mDateCheck;
     private String mTime;
+    private int mTag;
 
     private ExpandableListView mExpandList;
     private CustomExpandListAdapter adapter;
@@ -45,6 +47,7 @@ public class QuestionActivity extends AppCompatActivity {
 
         mDateCheck = getIntent().getStringExtra(ConstantManager.WORK_DATA);
         mTime = getIntent().getStringExtra(ConstantManager.WORK_TIME);
+        mTag = Integer.parseInt(getIntent().getStringExtra(ConstantManager.WORK_ID_TAG));
 
         mExpandList = findViewById(R.id.expond_question);
 
@@ -107,9 +110,12 @@ public class QuestionActivity extends AppCompatActivity {
                     JSONObject checkItem = jCheck.getJSONObject(j);
                     Log.d("CI"," ITEM Title :"+checkItem.get("title"));
                     // TODO добавить убирание элемента по времени.
-                    m = new HashMap<String, String>();
-                    m.put("itemText",checkItem.getString("title"));
-                    childDataItem.add(m);
+                    JSONArray wt =  checkItem.getJSONArray("time_check");
+                    if (wt.getInt(mTag-1) == 1) {
+                        m = new HashMap<String, String>();
+                        m.put("itemText", checkItem.getString("title"));
+                        childDataItem.add(m);
+                    }
                 }
                 childData.add(childDataItem);
             }
