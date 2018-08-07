@@ -179,7 +179,6 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         Log.d(TAG,"POST IS "+groupID+" "+childID+" "+id);
 
         Object fmd = adapter.getChild(groupID, childID);
-        System.out.println(fmd);
         Log.d(TAG," ITEM "+((CheckModel)((HashMap) fmd).get("itemText")).getTitle());
         ((CheckModel) ((HashMap) fmd).get("itemText")).setCheck(true);
         adapter.notifyDataSetChanged();

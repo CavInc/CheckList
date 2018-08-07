@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper  extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION = 1 ;
     public static final String DATABASE_NAME = "checklist.db3";
+    public static final String CHECKED = "check_data";
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -28,6 +29,13 @@ public class DBHelper  extends SQLiteOpenHelper{
 
     private void updateDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion<1){
+            db.execSQL("create table "+CHECKED+"(" +
+                    "create_date text," +
+                    "check_time text," +
+                    "check_group text," +
+                    "check_item text," +
+                    "photo_file text," +
+                    "comment text)");
 
         } else {
 

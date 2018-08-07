@@ -112,6 +112,7 @@ public class CustomExpandListAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    //https://ru.stackoverflow.com/questions/754641/android-expandablelistview-checkbox
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild,
