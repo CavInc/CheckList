@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.CheckModel;
 import tk.cavinc.checklist.ui.adapters.CustomExpandListAdapter;
 import tk.cavinc.checklist.utils.ConstantManager;
 
@@ -31,7 +33,7 @@ import tk.cavinc.checklist.utils.ConstantManager;
 //http://abhiandroid.com/ui/expandablelistadapter-example-android.html
 // https://stackoverflow.com/questions/5188196/how-to-write-custom-expandablelistadapter - тоже самое
 
-public class QuestionActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener{
+public class QuestionActivity extends AppCompatActivity implements ExpandableListView.OnChildClickListener,AdapterView.OnItemLongClickListener{
     private static final String TAG = "QA";
     private DataManager mDataManager;
     private String mDateCheck;
@@ -53,6 +55,8 @@ public class QuestionActivity extends AppCompatActivity implements AdapterView.O
 
         mExpandList = findViewById(R.id.expond_question);
         mExpandList.setOnItemLongClickListener(this);
+        //mExpandList.setOnItemClickListener(this);
+        mExpandList.setOnChildClickListener(this);
 
         costructData();
 
@@ -93,7 +97,7 @@ public class QuestionActivity extends AppCompatActivity implements AdapterView.O
         ArrayList<Map<String, String>> groupData = new ArrayList<Map<String, String>>();
 
         // создаем коллекцию для коллекций элементов
-        ArrayList<ArrayList<Map<String, String>>> childData = new ArrayList<ArrayList<Map<String, String>>>();
+        ArrayList<ArrayList<Map<String, CheckModel>>> childData = new ArrayList<ArrayList<Map<String, CheckModel>>>();
 
 
         try {
@@ -107,17 +111,23 @@ public class QuestionActivity extends AppCompatActivity implements AdapterView.O
                 m.put("groupName",quest.getString("title"));
                 groupData.add(m);
 
-                ArrayList<Map<String, String>> childDataItem = new ArrayList<Map<String, String>>();
+                ArrayList<Map<String, CheckModel>> childDataItem = new ArrayList<Map<String, CheckModel>>();
                 JSONArray jCheck = quest.getJSONArray("check");
+                HashMap<String,CheckModel> mx = new HashMap<>();
                 for (int j=0 ; j<jCheck.length() ; j++){
                     JSONObject checkItem = jCheck.getJSONObject(j);
                     Log.d("CI"," ITEM Title :"+checkItem.get("title"));
                     // TODO добавить убирание элемента по времени.
                     JSONArray wt =  checkItem.getJSONArray("time_check");
                     if (wt.getInt(mTag-1) == 1) {
-                        m = new HashMap<String, String>();
-                        m.put("itemText", checkItem.getString("title"));
-                        childDataItem.add(m);
+                        mx = new HashMap<String, CheckModel>();
+
+                        if (checkItem.has("photo") && checkItem.getBoolean("photo")) {
+                            mx.put("itemText",new CheckModel(checkItem.getInt("id"),checkItem.getString("title"),false,true));
+                        } else {
+                            mx.put("itemText", new CheckModel(checkItem.getInt("id"), checkItem.getString("title"), false));
+                        }
+                        childDataItem.add(mx);
                     }
                 }
                 childData.add(childDataItem);
@@ -159,6 +169,21 @@ public class QuestionActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.d(TAG,"POS :"+position);
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onChildClick(ExpandableListView expandableListView, View view, int groupID, int childID, long id) {
+        Log.d(TAG,"POST IS "+groupID+" "+childID+" "+id);
+
+        Object fmd = adapter.getChild(groupID, childID);
+        System.out.println(fmd);
+        Log.d(TAG," ITEM "+((CheckModel)((HashMap) fmd).get("itemText")).getTitle());
+        ((CheckModel) ((HashMap) fmd).get("itemText")).setCheck(true);
+        adapter.notifyDataSetChanged();
+
         return false;
     }
 }

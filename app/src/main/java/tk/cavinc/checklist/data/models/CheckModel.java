@@ -5,10 +5,11 @@ import java.util.ArrayList;
 public class CheckModel {
     private int mId;
     private String mTitle;
-    private boolean mCheck;
-    private boolean mPhoto;
+    private boolean mCheck = false;
+    private boolean mPhoto = false;
     private String mPhotoName;
     private ArrayList<CheckItemModel> mItems;
+    private String mComment;
 
     public CheckModel(int id, String title, ArrayList<CheckItemModel> items) {
         mId = id;
@@ -59,5 +60,13 @@ public class CheckModel {
 
     public void setPhotoName(String photoName) {
         mPhotoName = photoName;
+    }
+
+    public String getComment() {
+        return mComment;
+    }
+
+    public void setComment(String comment) {
+        mComment = comment;
     }
 }

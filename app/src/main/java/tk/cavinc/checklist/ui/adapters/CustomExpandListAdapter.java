@@ -5,12 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckedTextView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import tk.cavinc.checklist.R;
+import tk.cavinc.checklist.data.models.CheckModel;
 
 public class CustomExpandListAdapter extends BaseExpandableListAdapter {
 
@@ -115,9 +121,31 @@ public class CustomExpandListAdapter extends BaseExpandableListAdapter {
 
         HashMap l = (HashMap) mChildData.get(groupPosition).get(childPosition);
 
-        TextView tv = (TextView) v.findViewById(mChildTo[0]);
-        String s = (String) l.get(mChildFrom[0]);
-        tv.setText(s);
+        final CheckedTextView tv = (CheckedTextView) v.findViewById(mChildTo[0]);
+        TextView tv2 = v.findViewById(R.id.expant_list_item_name2);
+        LinearLayout lv = v.findViewById(R.id.expant_list_item_lv);
+
+        //String s = (String) l.get(mChildFrom[0]);
+        CheckModel model = (CheckModel) l.get(mChildFrom[0]);
+        if (!model.isPhoto()) {
+            tv.setText(model.getTitle());
+            lv.setVisibility(View.GONE);
+            tv.setChecked(model.isCheck());
+        } else {
+            lv.setVisibility(View.VISIBLE);
+            tv.setVisibility(View.GONE);
+            tv2.setText(model.getTitle());
+        }
+
+        /*
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv.setChecked(tv.isChecked());
+                ((CheckModel) ((HashMap) mChildData.get(groupPosition).get(childPosition)).get(mChildFrom[0])).setCheck(tv.isChecked());
+            }
+        });
+        */
 
         return v;
     }
