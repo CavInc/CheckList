@@ -25,6 +25,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".ui.activitys.ArhiveActivity"
+                  android:screenOrientation="portrait"
             android:label="Архивы">
         </activity>
     </application>

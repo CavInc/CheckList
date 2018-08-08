@@ -164,6 +164,10 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 childTo);
         mExpandList.setAdapter(adapter);
 
+        for (int i=0;i<groupData.size();i++) {
+            mExpandList.expandGroup(i);
+        }
+
     }
 
 
@@ -171,6 +175,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.d(TAG,"POS :"+position);
         CommentDialog dialog = new CommentDialog();
+        dialog.setDialogListener(mCommentDialogListener);
         dialog.show(getFragmentManager(),"CD");
         return true;
     }
@@ -187,4 +192,11 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
         return false;
     }
+
+    CommentDialog.OnCommentDialogListener mCommentDialogListener = new CommentDialog.OnCommentDialogListener() {
+        @Override
+        public void onChange(String val) {
+
+        }
+    };
 }
