@@ -59,4 +59,31 @@ public class DBConnect {
         return rec;
     }
 
+    public ArrayList<CheckItemModel> getCheckInDate(String date){
+        ArrayList<CheckItemModel> rec = new ArrayList<>();
+        open();
+        Cursor cursor = database.query(DBHelper.CHECKED,
+                new String[] {"check_time","check_group","check_item","photo_file","comment","checked"},
+                "create_date=?",new String[]{date},null,null,"check_group,check_item");
+        while (cursor.moveToNext()){
+            boolean photo = false;
+            if (cursor.getString(cursor.getColumnIndex("photo_file")).length() !=0) {
+                photo = true;
+            }
+            rec.add(new CheckItemModel(
+                    cursor.getInt(cursor.getColumnIndex("check_group")),
+                    cursor.getInt(cursor.getColumnIndex("check_item")),
+                    "",
+                    (cursor.getInt(cursor.getColumnIndex("checked")) == 1 ? true : false),
+                    photo,
+                    cursor.getString(cursor.getColumnIndex("photo_file")),
+                    cursor.getString(cursor.getColumnIndex("comment")),
+                    cursor.getString(cursor.getColumnIndex("check_time"))
+            ));
+
+        }
+        close();
+        return rec;
+    }
+
 }

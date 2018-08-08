@@ -105,6 +105,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
             return;
         }
 
+        ArrayList<CheckItemModel> storeData = mDataManager.getDB().getCheckInDate(mLongData);
+
         // заполняем коллекцию групп из массива с названиями групп
         ArrayList<Map<String, String>> groupData = new ArrayList<Map<String, String>>();
 
@@ -266,15 +268,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
     // сохраняем данные в базу
     private void storeData(){
-        String dt;
-        try {
-            Date date = Utils.strToDate("dd.MM.yyyy",mLongData);
-            dt = Utils.dateToStr("yyyy-MM-dd",date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return;
-        }
-        mDataManager.getDB().addCheckRec(selectData,dt,mTime);
+        mDataManager.getDB().addCheckRec(selectData,mLongData,mTime);
         adapter.notifyDataSetChanged();
     }
 }

@@ -3,7 +3,8 @@ package tk.cavinc.checklist.data.models;
 import java.util.ArrayList;
 
 public class CheckItemModel {
-    private int groupID;
+    private String mTime;
+    private int mGroupID;
     private int mId;
     private String mTitle;
     private boolean mCheck = false;
@@ -13,6 +14,7 @@ public class CheckItemModel {
 
 
     public CheckItemModel(int groupID,int id, String title, boolean check, boolean photo) {
+        mGroupID = groupID;
         mId = id;
         mTitle = title;
         mCheck = check;
@@ -20,13 +22,25 @@ public class CheckItemModel {
     }
 
     public CheckItemModel(int groupID,int id, String title, boolean check) {
+        mGroupID = groupID;
         mId = id;
         mTitle = title;
         mCheck = check;
     }
 
+    public CheckItemModel(int groupID, int id, String title, boolean check, boolean photo, String photoName, String comment,String time) {
+        mGroupID = groupID;
+        mId = id;
+        mTitle = title;
+        mCheck = check;
+        mPhoto = photo;
+        mPhotoName = photoName;
+        mComment = comment;
+        mTime = time;
+    }
+
     public int getGroupID() {
-        return groupID;
+        return mGroupID;
     }
 
     public int getId() {
