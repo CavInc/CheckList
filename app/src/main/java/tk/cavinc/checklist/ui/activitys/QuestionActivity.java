@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -265,7 +266,15 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
     // сохраняем данные в базу
     private void storeData(){
-        mDataManager.getDB().addCheckRec(selectData,mLongData,mTime);
+        String dt;
+        try {
+            Date date = Utils.strToDate("dd.MM.yyyy",mLongData);
+            dt = Utils.dateToStr("yyyy-MM-dd",date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
+        }
+        mDataManager.getDB().addCheckRec(selectData,dt,mTime);
         adapter.notifyDataSetChanged();
     }
 }
