@@ -8,7 +8,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import tk.cavinc.checklist.R;
-import tk.cavinc.checklist.data.models.CheckModel;
+import tk.cavinc.checklist.data.models.CheckItemModel;
 
 public class CustomExpandListAdapter extends BaseExpandableListAdapter {
 
@@ -128,7 +127,7 @@ public class CustomExpandListAdapter extends BaseExpandableListAdapter {
         LinearLayout lv = v.findViewById(R.id.expant_list_item_lv);
 
         //String s = (String) l.get(mChildFrom[0]);
-        CheckModel model = (CheckModel) l.get(mChildFrom[0]);
+        CheckItemModel model = (CheckItemModel) l.get(mChildFrom[0]);
         if (!model.isPhoto()) {
             tv.setText(model.getTitle());
             lv.setVisibility(View.GONE);

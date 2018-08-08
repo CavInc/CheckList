@@ -33,11 +33,11 @@ public class DBHelper  extends SQLiteOpenHelper{
                     "create_date text," +
                     "check_time text," +
                     "check_group text," +
-                    "check_item text," +
-                    "photo_file text," +
-                    "comment text)");
-
-        } else {
+                    "check_item integer," +
+                    "photo_file integer," +
+                    "checked integer default 0,"+
+                    "comment text," +
+                    "primary key (create_date,check_time,check_group,check_item))");
 
         }
     }

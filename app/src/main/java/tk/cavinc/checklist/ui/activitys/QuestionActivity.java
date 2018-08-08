@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
-import tk.cavinc.checklist.data.models.CheckModel;
+import tk.cavinc.checklist.data.models.CheckItemModel;
 import tk.cavinc.checklist.ui.adapters.CustomExpandListAdapter;
 import tk.cavinc.checklist.ui.dialogs.CommentDialog;
 import tk.cavinc.checklist.utils.ConstantManager;
@@ -45,6 +44,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private DataManager mDataManager;
     private String mDateCheck;
     private String mTime;
+    private String mLongData;
     private int mTag;
 
     private ExpandableListView mExpandList;
@@ -57,6 +57,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         setContentView(R.layout.activity_question);
         mDataManager = DataManager.getInstance();
 
+
+        mLongData = getIntent().getStringExtra(ConstantManager.WORK_DATA_LONG);
         mDateCheck = getIntent().getStringExtra(ConstantManager.WORK_DATA);
         mTime = getIntent().getStringExtra(ConstantManager.WORK_TIME);
         mTag = Integer.parseInt(getIntent().getStringExtra(ConstantManager.WORK_ID_TAG));
@@ -106,7 +108,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         ArrayList<Map<String, String>> groupData = new ArrayList<Map<String, String>>();
 
         // создаем коллекцию для коллекций элементов
-        ArrayList<ArrayList<Map<String, CheckModel>>> childData = new ArrayList<ArrayList<Map<String, CheckModel>>>();
+        ArrayList<ArrayList<Map<String, CheckItemModel>>> childData = new ArrayList<ArrayList<Map<String, CheckItemModel>>>();
 
 
         try {
@@ -116,25 +118,26 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 JSONObject quest = jArr.getJSONObject(i);
                 Log.d("QA","TITEL:"+quest.get("title"));
                 // заполняем список атрибутов для каждой группы
+                int groupID = quest.getInt("id");
                 HashMap<String, String> m = new HashMap<String, String>();
                 m.put("groupName",quest.getString("title"));
                 groupData.add(m);
 
-                ArrayList<Map<String, CheckModel>> childDataItem = new ArrayList<Map<String, CheckModel>>();
+                ArrayList<Map<String, CheckItemModel>> childDataItem = new ArrayList<Map<String, CheckItemModel>>();
                 JSONArray jCheck = quest.getJSONArray("check");
-                HashMap<String,CheckModel> mx = new HashMap<>();
+                HashMap<String,CheckItemModel> mx = new HashMap<>();
                 for (int j=0 ; j<jCheck.length() ; j++){
                     JSONObject checkItem = jCheck.getJSONObject(j);
                     Log.d("CI"," ITEM Title :"+checkItem.get("title"));
                     // TODO добавить убирание элемента по времени.
                     JSONArray wt =  checkItem.getJSONArray("time_check");
                     if (wt.getInt(mTag-1) == 1) {
-                        mx = new HashMap<String, CheckModel>();
+                        mx = new HashMap<String, CheckItemModel>();
 
                         if (checkItem.has("photo") && checkItem.getBoolean("photo")) {
-                            mx.put("itemText",new CheckModel(checkItem.getInt("id"),checkItem.getString("title"),false,true));
+                            mx.put("itemText",new CheckItemModel(groupID,checkItem.getInt("id"),checkItem.getString("title"),false,true));
                         } else {
-                            mx.put("itemText", new CheckModel(checkItem.getInt("id"), checkItem.getString("title"), false));
+                            mx.put("itemText", new CheckItemModel(groupID,checkItem.getInt("id"), checkItem.getString("title"), false));
                         }
                         childDataItem.add(mx);
                     }
@@ -183,36 +186,40 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.d(TAG,"POS :"+position);
         Object model = adapterView.getItemAtPosition(position);
+        selectData = (CheckItemModel) ((HashMap) model).get("itemText");
+        Log.d(TAG,"ITEM "+selectData.getTitle());
         CommentDialog dialog = new CommentDialog();
         dialog.setDialogListener(mCommentDialogListener);
         dialog.show(getFragmentManager(),"CD");
         return true;
     }
 
-    CheckModel selectData;
+    CheckItemModel selectData;
 
     @Override
     public boolean onChildClick(ExpandableListView expandableListView, View view, int groupID, int childID, long id) {
         Log.d(TAG,"POST IS "+groupID+" "+childID+" "+id);
 
         Object fmd = adapter.getChild(groupID, childID);
-        selectData = (CheckModel) ((HashMap) fmd).get("itemText");
+        selectData = (CheckItemModel) ((HashMap) fmd).get("itemText");
 
-        Log.d(TAG," ITEM "+((CheckModel)((HashMap) fmd).get("itemText")).getTitle());
-        if (((CheckModel) ((HashMap) fmd).get("itemText")).isPhoto() ) {
-            Log.d(TAG,"PHOTO RECORD");
+        Log.d(TAG," ITEM "+selectData.getTitle());
+        if (selectData.isPhoto() ) {
             loadPhoto(groupID,childID);
         }else {
-            ((CheckModel) ((HashMap) fmd).get("itemText")).setCheck(true);
+            selectData.setCheck(true);
+            storeData();
         }
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
         return false;
     }
 
     CommentDialog.OnCommentDialogListener mCommentDialogListener = new CommentDialog.OnCommentDialogListener() {
         @Override
         public void onChange(String val) {
-
+            selectData.setComment(val);
+            storeData();
+            //adapter.notifyDataSetChanged();
         }
     };
 
@@ -231,7 +238,6 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private File createFile(int group,int pos) throws IOException {
         String timeStamp = Utils.dateToStr("yyyyyMMdd",new Date());
         String fname = String.valueOf(group)+"_"+String.valueOf(pos)+"_"+timeStamp+"_"+mTime.replaceAll(":","");
-        Log.d(TAG,fname);
         if (mDataManager.isExternalStorageWritable()){
             String path = mDataManager.getStorageAppPath();
             //File pathPath = mDataManager.getStoragePath();
@@ -247,13 +253,19 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         switch (requestCode) {
             case ConstantManager.REQUEST_CAMERA_PICTURE:
                 if (resultCode == RESULT_OK && mPhotoFile !=null){
-                    Log.d(TAG,"YES PHOTO");
                     selectData.setPhotoName(mPhotoFile.getName());
-                    adapter.notifyDataSetChanged();
+                    storeData();
+                    //adapter.notifyDataSetChanged();
                 }else {
                     mPhotoFile = null;
                 }
                 break;
         }
+    }
+
+    // сохраняем данные в базу
+    private void storeData(){
+        mDataManager.getDB().addCheckRec(selectData,mLongData,mTime);
+        adapter.notifyDataSetChanged();
     }
 }

@@ -9,4 +9,5 @@ public interface ConstantManager {
     String WORK_TIME = "WORK_TIME";
     String WORK_ID_TAG = "WORK_ID_TAG";
     int REQUEST_CAMERA_PICTURE = 218;
+    String WORK_DATA_LONG = "WORK_LONG_DATA";
 }

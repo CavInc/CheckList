@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Object tag = bt.getTag();
 
         Intent intent = new Intent(this,QuestionActivity.class);
+        intent.putExtra(ConstantManager.WORK_DATA_LONG,mLongData);
         intent.putExtra(ConstantManager.WORK_DATA,mShortData);
         intent.putExtra(ConstantManager.WORK_TIME,cp);
         intent.putExtra(ConstantManager.WORK_ID_TAG,tag.toString());

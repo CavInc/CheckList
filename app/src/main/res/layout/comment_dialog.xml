@@ -10,7 +10,10 @@
         android:layout_height="wrap_content"/>
     <EditText
         android:id="@+id/cd_et"
-        android:inputType="textAutoCorrect"
+        android:inputType="textAutoCorrect|textMultiLine"
+        android:minLines="2"
+        android:maxLines="10"
+        android:gravity="top|left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
