@@ -68,7 +68,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         ActionBar actionBar = getSupportActionBar();
         if (actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Опрос: "+mDateCheck+"  ::  "+mTime);
+            actionBar.setTitle("Опрос: "+mDateCheck);
+            actionBar.setSubtitle(mTime);
         }
     }
 

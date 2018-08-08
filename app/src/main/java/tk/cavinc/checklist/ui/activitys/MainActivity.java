@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DataManager mDataManager;
 
     private TextView mTextView;
+    private String mLongData;
+    private String mShortData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +31,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDataManager = DataManager.getInstance();
 
         Date nowDate = new Date();
+        mLongData = Utils.dateToStr("dd.MM.yyyy",nowDate);
+        mShortData = Utils.dateToStr("dd.MM.yy",nowDate);
+
         mTextView = findViewById(R.id.date_tv);
-        mTextView.setText(Utils.dateToStr("dd.MM.yyyy",nowDate));
+        mTextView.setText(mLongData);
 
 
         findViewById(R.id.bt0900).setOnClickListener(this);
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Object tag = bt.getTag();
 
         Intent intent = new Intent(this,QuestionActivity.class);
-        intent.putExtra(ConstantManager.WORK_DATA,mTextView.getText().toString());
+        intent.putExtra(ConstantManager.WORK_DATA,mShortData);
         intent.putExtra(ConstantManager.WORK_TIME,cp);
         intent.putExtra(ConstantManager.WORK_ID_TAG,tag.toString());
         startActivity(intent);
