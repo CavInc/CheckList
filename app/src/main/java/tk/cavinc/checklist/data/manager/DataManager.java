@@ -59,13 +59,25 @@ public class DataManager {
     public String getStorageAppPath(){
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
             return null;
-        File path = new File (Environment.getExternalStorageDirectory(), "SyrgytSity");
+        File path = new File (Environment.getExternalStorageDirectory(), "CheckList");
         if (! path.exists()) {
             if (!path.mkdirs()){
                 return null;
             }
         }
         return path.getPath();
+    }
+
+    public File getStoragePath(){
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            return null;
+        File path = new File (Environment.getExternalStorageDirectory(), "CheckList");
+        if (! path.exists()) {
+            if (!path.mkdirs()){
+                return null;
+            }
+        }
+        return path;
     }
 
     // проверяем включен ли интернетик

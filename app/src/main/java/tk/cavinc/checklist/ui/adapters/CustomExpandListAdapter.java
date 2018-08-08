@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -136,17 +137,12 @@ public class CustomExpandListAdapter extends BaseExpandableListAdapter {
             lv.setVisibility(View.VISIBLE);
             tv.setVisibility(View.GONE);
             tv2.setText(model.getTitle());
-        }
-
-        /*
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tv.setChecked(tv.isChecked());
-                ((CheckModel) ((HashMap) mChildData.get(groupPosition).get(childPosition)).get(mChildFrom[0])).setCheck(tv.isChecked());
+            if (model.getPhotoName() != null ) {
+                ((ImageView) v.findViewById(R.id.expant_list_item_photo)).setImageResource(R.drawable.ic_photo_camera_black_24dp);
+            } else {
+                ((ImageView) v.findViewById(R.id.expant_list_item_photo)).setImageResource(R.drawable.ic_photo_camera_gray_24dp);
             }
-        });
-        */
+        }
 
         return v;
     }
