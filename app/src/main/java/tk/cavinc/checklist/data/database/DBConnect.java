@@ -24,4 +24,9 @@ public class DBConnect {
         }
     }
 
+    // сохраняем данные
+    public void addCheckRec(){
+
+    }
+
 }

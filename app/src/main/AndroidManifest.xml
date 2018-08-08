@@ -24,6 +24,9 @@
         <activity android:name=".ui.activitys.QuestionActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".ui.activitys.ArhiveActivity"
+            android:label="Архивы">
+        </activity>
     </application>
 
 </manifest>
