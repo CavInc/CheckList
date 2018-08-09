@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mShortData = Utils.dateToStr("dd.MM.yy",nowDate);
 
         mTextView = findViewById(R.id.date_tv);
-        mTextView.setText(mLongData);
+        mTextView.setText(Utils.dateToStr("dd.MM.yyyy",nowDate));
 
 
         findViewById(R.id.bt0900).setOnClickListener(this);
