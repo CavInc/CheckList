@@ -142,6 +142,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                         } else {
                             mx.put("itemText", new CheckItemModel(groupID,checkItem.getInt("id"), checkItem.getString("title"), false));
                         }
+
                         childDataItem.add(mx);
                     }
                 }
