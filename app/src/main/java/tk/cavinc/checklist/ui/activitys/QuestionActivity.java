@@ -124,7 +124,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 int groupID = quest.getInt("id");
                 HashMap<String, String> m = new HashMap<String, String>();
                 m.put("groupName",quest.getString("title"));
-                groupData.add(m);
+                //groupData.add(m);
 
                 ArrayList<Map<String, CheckItemModel>> childDataItem = new ArrayList<Map<String, CheckItemModel>>();
                 JSONArray jCheck = quest.getJSONArray("check");
@@ -145,7 +145,10 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                         childDataItem.add(mx);
                     }
                 }
-                childData.add(childDataItem);
+                if (childDataItem.size() !=0) {
+                    childData.add(childDataItem);
+                    groupData.add(m);
+                }
             }
 
 
@@ -210,7 +213,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         if (selectData.isPhoto() ) {
             loadPhoto(groupID,childID);
         }else {
-            selectData.setCheck(true);
+            selectData.setCheck(! selectData.isCheck());
             storeData();
         }
         //adapter.notifyDataSetChanged();

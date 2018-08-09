@@ -67,8 +67,10 @@ public class DBConnect {
                 "create_date=?",new String[]{date},null,null,"check_group,check_item");
         while (cursor.moveToNext()){
             boolean photo = false;
-            if (cursor.getString(cursor.getColumnIndex("photo_file")).length() !=0) {
-                photo = true;
+            if (cursor.getString(cursor.getColumnIndex("photo_file")) != null) {
+                if (cursor.getString(cursor.getColumnIndex("photo_file")).length() != 0) {
+                    photo = true;
+                }
             }
             rec.add(new CheckItemModel(
                     cursor.getInt(cursor.getColumnIndex("check_group")),
