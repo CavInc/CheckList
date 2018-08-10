@@ -88,4 +88,19 @@ public class DBConnect {
         return rec;
     }
 
+    // количество обработанных записей
+    public int getCheckCount(String date,String time) {
+        int res  = 0;
+        open();
+        String sql = "select create_date,check_time,count(1) from check_data\n" +
+                "where create_date='"+date+"'\n" +
+                "group by create_date,check_time";
+        Cursor cursor = database.rawQuery(sql,null);
+        while (cursor.moveToNext()){
+            res = cursor.getInt(2);
+        }
+        close();
+        return res;
+    }
+
 }
