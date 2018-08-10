@@ -7,6 +7,20 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/expant_list_item_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_comment_black_24dp"/>
+    </RelativeLayout>
     <CheckedTextView
         android:id="@+id/expant_list_item_name"
         android:text="Название поля"

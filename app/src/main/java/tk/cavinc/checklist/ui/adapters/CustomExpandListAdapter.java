@@ -125,6 +125,7 @@ public class CustomExpandListAdapter extends BaseExpandableListAdapter {
         final CheckedTextView tv = (CheckedTextView) v.findViewById(mChildTo[0]);
         TextView tv2 = v.findViewById(R.id.expant_list_item_name2);
         LinearLayout lv = v.findViewById(R.id.expant_list_item_lv);
+        View lx2 = v.findViewById(R.id.expant_list_item_comment);
 
         //String s = (String) l.get(mChildFrom[0]);
         CheckItemModel model = (CheckItemModel) l.get(mChildFrom[0]);
@@ -140,6 +141,12 @@ public class CustomExpandListAdapter extends BaseExpandableListAdapter {
                 ((ImageView) v.findViewById(R.id.expant_list_item_photo)).setImageResource(R.drawable.ic_photo_camera_black_24dp);
             } else {
                 ((ImageView) v.findViewById(R.id.expant_list_item_photo)).setImageResource(R.drawable.ic_photo_camera_gray_24dp);
+            }
+        }
+
+        if (model.getComment() != null){
+            if  (model.getComment().length() != 0) {
+                lx2.setVisibility(View.VISIBLE);
             }
         }
 
