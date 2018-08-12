@@ -37,11 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBt0100;
     private Button mBt0500;
 
-    private String CLIENT_ID = "00a1d2b7031c483a892ccbef3c4bd13c";
 
-    {
-        YandexDiskApi.DEBUG = true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,18 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBt2100.setOnClickListener(this);
         mBt0100.setOnClickListener(this);
         mBt0500.setOnClickListener(this);
-
-
-        final YandexDiskApi api = new YandexDiskApi(CLIENT_ID);
-        api.setCredentials("kotov-197", "Auryn1245");
-        Log.d(TAG,"XF : "+api.isAuthorization());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                api.createFolder("/CheckList/");
-
-            }
-        }).start();
 
     }
 

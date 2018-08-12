@@ -15,6 +15,7 @@ import android.widget.ExpandableListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vadel.yandexdisk.YandexDiskApi;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +54,12 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private File mPhotoFile;
     private int countItem = 0;
 
+    private String CLIENT_ID = "00a1d2b7031c483a892ccbef3c4bd13c";
+
+    {
+        YandexDiskApi.DEBUG = true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +76,17 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         mExpandList.setOnItemLongClickListener(this);
         //mExpandList.setOnItemClickListener(this);
         mExpandList.setOnChildClickListener(this);
+
+        final YandexDiskApi api = new YandexDiskApi(CLIENT_ID);
+        api.setCredentials("kotov-197", "Auryn1245");
+        Log.d(TAG,"XF : "+api.isAuthorization());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                api.createFolder("/CheckList/"+mLongData.replaceAll("-","")+"/");
+            }
+        }).start();
+
 
         costructData();
 

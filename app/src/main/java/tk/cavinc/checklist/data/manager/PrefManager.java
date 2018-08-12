@@ -16,4 +16,8 @@ public class PrefManager {
         mSharedPreferences = App.getSharedPreferences();
     }
 
+    public void setLoginPassword(String login,String pass){
+
+    }
+
 }
