@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import org.vadel.yandexdisk.YandexDiskApi;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.CountTimeModel;
 import tk.cavinc.checklist.utils.ConstantManager;
 import tk.cavinc.checklist.utils.Utils;
 
@@ -54,13 +56,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTextView = findViewById(R.id.date_tv);
         mTextView.setText(Utils.dateToStr("dd.MM.yyyy",nowDate));
 
+        mBt0900 = findViewById(R.id.bt0900);
+        mBt1300 = findViewById(R.id.bt1300);
+        mBt1700 = findViewById(R.id.bt1700);
+        mBt2100 = findViewById(R.id.bt2100);
+        mBt0100 = findViewById(R.id.bt0100);
+        mBt0500 = findViewById(R.id.bt0500);
 
-        findViewById(R.id.bt0900).setOnClickListener(this);
-        findViewById(R.id.bt1300).setOnClickListener(this);
-        findViewById(R.id.bt1700).setOnClickListener(this);
-        findViewById(R.id.bt2100).setOnClickListener(this);
-        findViewById(R.id.bt0100).setOnClickListener(this);
-        findViewById(R.id.bt0500).setOnClickListener(this);
+        mBt0900.setOnClickListener(this);
+        mBt1300.setOnClickListener(this);
+        mBt1700.setOnClickListener(this);
+        mBt2100.setOnClickListener(this);
+        mBt0100.setOnClickListener(this);
+        mBt0500.setOnClickListener(this);
 
 
         final YandexDiskApi api = new YandexDiskApi(CLIENT_ID);
@@ -104,5 +112,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
     }
 }
