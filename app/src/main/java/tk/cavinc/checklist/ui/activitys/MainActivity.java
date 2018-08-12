@@ -24,6 +24,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String mLongData;
     private String mShortData;
 
+    private Button mBt0900;
+    private Button mBt1300;
+    private Button mBt1700;
+    private Button mBt2100;
+    private Button mBt0100;
+    private Button mBt0500;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

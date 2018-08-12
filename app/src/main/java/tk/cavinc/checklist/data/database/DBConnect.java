@@ -2,12 +2,14 @@ package tk.cavinc.checklist.data.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
 import tk.cavinc.checklist.data.models.CheckItemModel;
+import tk.cavinc.checklist.data.models.CountTimeModel;
 
 /**
  * Created by cav on 02.08.18.
@@ -101,6 +103,23 @@ public class DBConnect {
         }
         close();
         return res;
+    }
+
+    //
+    public ArrayList<CountTimeModel> getCountAll(String date) {
+        ArrayList<CountTimeModel> rec = new ArrayList<>();
+        open();
+        String sql = "select check_time,count(1) from check_data\n" +
+                "where create_date='"+date+"'\n" +
+                "group by check_time";
+        Cursor cursor = database.rawQuery(sql,null);
+        while (cursor.moveToNext()){
+            rec.add(new CountTimeModel(cursor.getString(0),
+                    cursor.getInt(1)));
+        }
+
+        close();
+        return rec;
     }
 
 }

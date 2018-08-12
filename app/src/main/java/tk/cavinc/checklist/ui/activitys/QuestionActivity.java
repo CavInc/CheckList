@@ -51,6 +51,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private ExpandableListView mExpandList;
     private CustomExpandListAdapter adapter;
     private File mPhotoFile;
+    private int countItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +152,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                             mx.get("itemText").setComment(storeData.get(pos).getComment());
                             mx.get("itemText").setPhotoName(storeData.get(pos).getPhotoName());
                         }
+                        countItem += 1;
 
                         childDataItem.add(mx);
                     }
@@ -166,6 +168,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
             e.printStackTrace();
             return;
         }
+
 
         // создаем  expand list view
 
