@@ -4,15 +4,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.ui.adapters.ArhiveAdapter;
 
-public class ArhiveActivity extends AppCompatActivity {
+public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private DataManager mDataManager;
 
     private ListView mListView;
@@ -26,6 +29,8 @@ public class ArhiveActivity extends AppCompatActivity {
         mDataManager = DataManager.getInstance();
 
         mListView = findViewById(R.id.arhive_lv);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mListView.setOnItemClickListener(this);
 
         setupTools();
     }
@@ -53,7 +58,7 @@ public class ArhiveActivity extends AppCompatActivity {
     }
 
     private void updateUI(){
-        ArrayList<String> data = mDataManager.getDB().getArhiveChech();
+        ArrayList<ArhiveModel> data = mDataManager.getDB().getArhiveChech();
         if (mAdapter == null ){
             mAdapter = new ArhiveAdapter(this,R.layout.arhive_item,data);
             mListView.setAdapter(mAdapter);
@@ -61,5 +66,11 @@ public class ArhiveActivity extends AppCompatActivity {
             mAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        mAdapter.getItem(position).setCheck(!mAdapter.getItem(position).isCheck());
+        mAdapter.notifyDataSetChanged();
     }
 }

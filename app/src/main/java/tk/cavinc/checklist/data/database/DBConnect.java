@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
+import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.data.models.CheckItemModel;
 import tk.cavinc.checklist.data.models.CountTimeModel;
 
@@ -49,13 +50,13 @@ public class DBConnect {
     }
 
     // список сохраненных чек листов
-    public ArrayList<String> getArhiveChech(){
-        ArrayList<String> rec = new ArrayList<>();
+    public ArrayList<ArhiveModel> getArhiveChech(){
+        ArrayList<ArhiveModel> rec = new ArrayList<>();
         open();
         String sql = "select distinct create_date from "+DBHelper.CHECKED+" order by create_date";
         Cursor cursor = database.rawQuery(sql,null);
         while (cursor.moveToNext()){
-            rec.add(cursor.getString(0));
+            rec.add(new ArhiveModel(cursor.getString(0),false));
         }
         close();
         return rec;
@@ -126,7 +127,8 @@ public class DBConnect {
     public void setPhotoStatus(){
         open();
         ContentValues values = new ContentValues();
-
+        values.put("photo_send",1);
+        database.update(DBHelper.CHECKED,values,"",new String[]{});
         close();
     }
 
