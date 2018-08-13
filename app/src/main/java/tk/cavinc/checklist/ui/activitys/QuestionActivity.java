@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,8 @@ import org.json.JSONObject;
 import org.vadel.yandexdisk.YandexDiskApi;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -57,6 +60,11 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private String CLIENT_ID = "00a1d2b7031c483a892ccbef3c4bd13c";
     private ArrayList<String> loginPass;
 
+    private boolean sendDirect = false;
+
+    private YandexDiskApi api;
+    private String yandexFolder;
+
     {
         YandexDiskApi.DEBUG = true;
     }
@@ -80,16 +88,26 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         mExpandList.setOnChildClickListener(this);
 
         loginPass = mDataManager.getPrefManager().getLoginPassword();
-
-        final YandexDiskApi api = new YandexDiskApi(CLIENT_ID);
-        api.setCredentials(loginPass.get(0), loginPass.get(1));
-        Log.d(TAG,"XF : "+api.isAuthorization());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                api.createFolder("/CheckList/"+mLongData.replaceAll("-","")+"/");
+        if (loginPass.get(0) != null && loginPass.get(1) != null) {
+            if (mDataManager.isOnline()) {
+                api = new YandexDiskApi(CLIENT_ID);
+                api.setCredentials(loginPass.get(0), loginPass.get(1));
+                Log.d(TAG, "XF : " + api.isAuthorization());
+                yandexFolder = "/CheckList/" + mLongData.replaceAll("-", "") + "/";
+                if (api.isAuthorization()) {
+                    sendDirect = true;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            api.createFolder(yandexFolder);
+                        }
+                    }).start();
+                }
+            } else {
+                //TODO сказать что хуй а не работа с хуяндексом
+                Toast.makeText(this, "Не включена передача данных", Toast.LENGTH_LONG).show();
             }
-        }).start();
+        }
 
 
         costructData();
@@ -297,6 +315,14 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                     selectData.setPhotoName(mPhotoFile.getName());
                     storeData();
                     //adapter.notifyDataSetChanged();
+
+                    if (sendDirect && api.isAuthorization()){
+                        try {
+                            sendFileInYandexDisk();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }else {
                     mPhotoFile = null;
                 }
@@ -308,5 +334,15 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private void storeData(){
         mDataManager.getDB().addCheckRec(selectData,mLongData,mTime);
         adapter.notifyDataSetChanged();
+    }
+
+    private void sendFileInYandexDisk() throws FileNotFoundException {
+        final InputStream io = new FileInputStream(mPhotoFile);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                api.uploadFile(yandexFolder+mPhotoFile.getName(),io,mPhotoFile.length());
+            }
+        }).start();
     }
 }

@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+
+        checkAndSetPermission();
+
         ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
 
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
@@ -110,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dialog.setOnLoginDialogListener(mListener);
             dialog.show(getFragmentManager(),"LD");
         }
+    }
+
+    private void checkAndSetPermission() {
+
     }
 
     LoginDialog.OnLoginDialogListener mListener = new LoginDialog.OnLoginDialogListener() {
