@@ -37,6 +37,15 @@ public class PrefManager {
     }
 
     // работа с текущими позициями
+    public void setCountWorkTime(String key,int count){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(key,count);
+        editor.apply();
+    }
+
+    public int getCountWorkTime(String key){
+        return mSharedPreferences.getInt(key,0);
+    }
 
 
 }

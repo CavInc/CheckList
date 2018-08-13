@@ -37,6 +37,7 @@ public class DBHelper  extends SQLiteOpenHelper{
                     "photo_file integer," +
                     "checked integer default 0,"+
                     "comment text," +
+                    "photo_send integer default 0," + // фото оправлено на YD
                     "primary key (create_date,check_time,check_group,check_item))");
 
         }

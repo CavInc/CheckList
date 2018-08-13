@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
 
+        setCountButton(rec);
+
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
         if (loginPass.get(0) == null && loginPass.get(1) == null) {
             LoginDialog dialog = new LoginDialog();
@@ -115,7 +117,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void setCountButton(ArrayList<CountTimeModel> rec) {
+        int countQuestion = 0;
+        countQuestion = mDataManager.getPrefManager().getCountWorkTime("09:00");
+        if (rec.get(0).getTime().equals("09:00")) {
+            Log.d(TAG," COUNT : "+countQuestion+" "+rec.get(0).getCount());
+        }
+    }
+
     private void checkAndSetPermission() {
+
 
     }
 

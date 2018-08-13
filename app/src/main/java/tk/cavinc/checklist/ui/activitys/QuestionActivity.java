@@ -203,12 +203,12 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 }
             }
 
-
         } catch (JSONException e) {
             e.printStackTrace();
             return;
         }
 
+        mDataManager.getPrefManager().setCountWorkTime(mTime,countItem);
 
         // создаем  expand list view
 
@@ -341,7 +341,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         new Thread(new Runnable() {
             @Override
             public void run() {
-                api.uploadFile(yandexFolder+mPhotoFile.getName(),io,mPhotoFile.length());
+                boolean res = api.uploadFile(yandexFolder + mPhotoFile.getName(), io, mPhotoFile.length());
+                //TODO проверяем и если не ушло то ставим флаг
             }
         }).start();
     }
