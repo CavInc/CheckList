@@ -122,4 +122,12 @@ public class DBConnect {
         return rec;
     }
 
+    // ставим стату оправки фотографии
+    public void setPhotoStatus(){
+        open();
+        ContentValues values = new ContentValues();
+
+        close();
+    }
+
 }

@@ -123,6 +123,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (rec.get(0).getTime().equals("09:00")) {
             Log.d(TAG," COUNT : "+countQuestion+" "+rec.get(0).getCount());
         }
+        countQuestion = mDataManager.getPrefManager().getCountWorkTime("13:00");
+        if (rec.get(1).getTime().equals("09:00")) {
+            Log.d(TAG," COUNT : "+countQuestion+" "+rec.get(1).getCount());
+        }
+
     }
 
     private void checkAndSetPermission() {
