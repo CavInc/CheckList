@@ -55,10 +55,12 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private int countItem = 0;
 
     private String CLIENT_ID = "00a1d2b7031c483a892ccbef3c4bd13c";
+    private ArrayList<String> loginPass;
 
     {
         YandexDiskApi.DEBUG = true;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +79,10 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         //mExpandList.setOnItemClickListener(this);
         mExpandList.setOnChildClickListener(this);
 
+        loginPass = mDataManager.getPrefManager().getLoginPassword();
+
         final YandexDiskApi api = new YandexDiskApi(CLIENT_ID);
-        api.setCredentials("kotov-197", "Auryn1245");
+        api.setCredentials(loginPass.get(0), loginPass.get(1));
         Log.d(TAG,"XF : "+api.isAuthorization());
         new Thread(new Runnable() {
             @Override

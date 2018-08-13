@@ -19,6 +19,7 @@ import java.util.Date;
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
 import tk.cavinc.checklist.data.models.CountTimeModel;
+import tk.cavinc.checklist.ui.dialogs.LoginDialog;
 import tk.cavinc.checklist.utils.ConstantManager;
 import tk.cavinc.checklist.utils.Utils;
 
@@ -102,5 +103,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
+
+        ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
+        if (loginPass.get(0) == null && loginPass.get(1) == null) {
+            LoginDialog dialog = new LoginDialog();
+            dialog.setOnLoginDialogListener(mListener);
+            dialog.show(getFragmentManager(),"LD");
+        }
     }
+
+    LoginDialog.OnLoginDialogListener mListener = new LoginDialog.OnLoginDialogListener() {
+        @Override
+        public void onLogin(String login, String pass) {
+            if (login.length() != 0 && pass.length() != 0){
+                mDataManager.getPrefManager().setLoginPassword(login,pass);
+            } else {
+                // TODO тут ругаемся
+            }
+        }
+    };
+
+
 }
