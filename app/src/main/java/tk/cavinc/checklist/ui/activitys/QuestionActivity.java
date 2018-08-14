@@ -161,19 +161,20 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
             JSONArray jArr = obj.getJSONArray("items");
             for (int i=0;i<jArr.length();i++){
                 JSONObject quest = jArr.getJSONObject(i);
-                Log.d("QA","TITEL:"+quest.get("title"));
+                //Log.d("QA","TITEL:"+quest.get("title"));
                 // заполняем список атрибутов для каждой группы
                 int groupID = quest.getInt("id");
                 HashMap<String, String> m = new HashMap<String, String>();
                 m.put("groupName",quest.getString("title"));
                 //groupData.add(m);
 
+               // int ccx = 0;
                 ArrayList<Map<String, CheckItemModel>> childDataItem = new ArrayList<Map<String, CheckItemModel>>();
                 JSONArray jCheck = quest.getJSONArray("check");
                 HashMap<String,CheckItemModel> mx = new HashMap<>();
                 for (int j=0 ; j<jCheck.length() ; j++){
                     JSONObject checkItem = jCheck.getJSONObject(j);
-                    Log.d("CI"," ITEM Title :"+checkItem.get("title"));
+                    // Log.d("CI"," ITEM Title :"+checkItem.get("title"));
                     // TODO добавить убирание элемента по времени.
                     JSONArray wt =  checkItem.getJSONArray("time_check");
                     if (wt.getInt(mTag-1) == 1) {
@@ -184,7 +185,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                         } else {
                             mx.put("itemText", new CheckItemModel(groupID,checkItem.getInt("id"), checkItem.getString("title"), false));
                             countItem += 1;
-                            Log.d("CI"," ITEM count:"+countItem);
+                           // Log.d("CI"," ITEM count:"+countItem);
+                            //ccx += 1;
                         }
 
                         mx.get("itemText").setTime(mTime);
@@ -202,6 +204,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 if (childDataItem.size() !=0) {
                     childData.add(childDataItem);
                     groupData.add(m);
+                    //Log.d("CI","ITEMS COUNT:"+ccx);
                 }
             }
 

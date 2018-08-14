@@ -134,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id != -1){
             countRec = rec.get(id).getCount();
             Log.d(TAG, " COUNT : " + countQuestion + " " + countRec);
+        } else {
+          return false;
         }
         if (countQuestion > countRec) return false;
         return true;
