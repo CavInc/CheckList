@@ -142,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setCountButton(ArrayList<CountTimeModel> rec) {
+        mBt1300.setEnabled(true);
+        mBt1700.setEnabled(true);
+        mBt2100.setEnabled(true);
+        mBt0100.setEnabled(true);
+        mBt0500.setEnabled(true);
+
         if (rec.size() == 0) {
             mBt1300.setEnabled(false);
             mBt1700.setEnabled(false);
