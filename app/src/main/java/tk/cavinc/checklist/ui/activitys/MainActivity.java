@@ -18,6 +18,7 @@ import java.util.Date;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.CheckItemModel;
 import tk.cavinc.checklist.data.models.CountTimeModel;
 import tk.cavinc.checklist.ui.dialogs.LoginDialog;
 import tk.cavinc.checklist.utils.ConstantManager;
@@ -117,11 +118,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void setCountButton(ArrayList<CountTimeModel> rec) {
 
+    private boolean getCountTwo(ArrayList<CountTimeModel> rec, String time) {
         int countQuestion = 0;
-        countQuestion = mDataManager.getPrefManager().getCountWorkTime("09:00");
-        if (rec.size() == 0) return;
+        int countRec = 0 ;
+
+        countQuestion = mDataManager.getPrefManager().getCountWorkTime(time);
+        int id = rec.indexOf(new CountTimeModel(time,0));
+        if (id != -1){
+            countRec = rec.get(id).getCount();
+            Log.d(TAG, " COUNT : " + countQuestion + " " + countRec);
+        }
+        if (countQuestion > countRec) return false;
+        return true;
+    }
+
+    private void setCountButton(ArrayList<CountTimeModel> rec) {
+        if (rec.size() == 0) {
+            mBt1300.setEnabled(false);
+            mBt1700.setEnabled(false);
+            mBt2100.setEnabled(false);
+            mBt0100.setEnabled(false);
+            mBt0500.setEnabled(false);
+            return;
+        }
+
+        if (!getCountTwo(rec,"09:00")){
+            mBt1300.setEnabled(false);
+            mBt1700.setEnabled(false);
+            mBt2100.setEnabled(false);
+            mBt0100.setEnabled(false);
+            mBt0500.setEnabled(false);
+            return;
+        }
+
+        if (!getCountTwo(rec,"13:00")) {
+            mBt1700.setEnabled(false);
+            mBt2100.setEnabled(false);
+            mBt0100.setEnabled(false);
+            mBt0500.setEnabled(false);
+            return;
+        }
+
+        if (!getCountTwo(rec,"17:00")) {
+            mBt2100.setEnabled(false);
+            mBt0100.setEnabled(false);
+            mBt0500.setEnabled(false);
+            return;
+        }
+
+        if (!getCountTwo(rec,"21:00")) {
+            mBt0100.setEnabled(false);
+            mBt0500.setEnabled(false);
+            return;
+        }
+
+        if (!getCountTwo(rec,"01:00")) {
+            mBt0500.setEnabled(false);
+            return;
+        }
+
+        if (!getCountTwo(rec,"05:00")) {
+
+        }
+
+
         /*
         if (rec.get(0).getTime().equals("09:00")) {
             Log.d(TAG," COUNT : "+countQuestion+" "+rec.get(0).getCount());
