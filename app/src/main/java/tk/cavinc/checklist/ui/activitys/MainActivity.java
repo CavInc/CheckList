@@ -1,6 +1,10 @@
 package tk.cavinc.checklist.ui.activitys;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +30,8 @@ import tk.cavinc.checklist.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MA";
+    private static final int PERMISSION_REQUEST_CODE = 200;
+
     private DataManager mDataManager;
 
     private TextView mTextView;
@@ -196,6 +202,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void checkAndSetPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},PERMISSION_REQUEST_CODE);
+        }
 
 
     }

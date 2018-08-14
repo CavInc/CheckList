@@ -183,6 +183,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                             mx.put("itemText",new CheckItemModel(groupID,checkItem.getInt("id"),checkItem.getString("title"),false,true));
                         } else {
                             mx.put("itemText", new CheckItemModel(groupID,checkItem.getInt("id"), checkItem.getString("title"), false));
+                            countItem += 1;
+                            Log.d("CI"," ITEM count:"+countItem);
                         }
 
                         mx.get("itemText").setTime(mTime);
@@ -193,7 +195,6 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                             mx.get("itemText").setComment(storeData.get(pos).getComment());
                             mx.get("itemText").setPhotoName(storeData.get(pos).getPhotoName());
                         }
-                        countItem += 1;
 
                         childDataItem.add(mx);
                     }
