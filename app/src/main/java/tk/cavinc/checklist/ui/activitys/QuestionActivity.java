@@ -99,7 +99,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            api.createFolder(yandexFolder);
+                            boolean res = api.createFolder(yandexFolder);
+                            Log.d(TAG,"CREATE FOLDER "+res);
                         }
                     }).start();
                 }
@@ -300,7 +301,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         if (mDataManager.isExternalStorageWritable()){
             String path = mDataManager.getStorageAppPath();
             //File pathPath = mDataManager.getStoragePath();
-            File imgFile = File.createTempFile(fname,"jpg",new File(path));
+            File imgFile = File.createTempFile(fname,".jpg",new File(path));
             return imgFile;
         }
         return null;
@@ -343,6 +344,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
             public void run() {
                 boolean res = api.uploadFile(yandexFolder + mPhotoFile.getName(), io, mPhotoFile.length());
                 //TODO проверяем и если не ушло то ставим флаг
+                Log.d(TAG," SEND FLG :"+res);
             }
         }).start();
     }

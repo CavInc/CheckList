@@ -124,7 +124,7 @@ public class DBConnect {
     }
 
     // ставим стату оправки фотографии
-    public void setPhotoStatus(){
+    public void setPhotoStatus(CheckItemModel model,String data,String time){
         open();
         ContentValues values = new ContentValues();
         values.put("photo_send",1);
