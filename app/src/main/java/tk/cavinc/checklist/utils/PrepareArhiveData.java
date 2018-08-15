@@ -67,7 +67,15 @@ public class PrepareArhiveData {
                     String time = null;
                     for (int k=0 ; k<wt.length(); k++){
                         time = ConstantManager.TIME_CHECK[k];
-                        ArhiveItemModel aItem = new ArhiveItemModel(checkItem.getInt("id"),checkItem.getString("title"),time,false,false);
+                        int pos = storeData.indexOf(new CheckItemModel(time,groupID,checkItem.getInt("id"),"",false,false));
+                        boolean check = false;
+                        boolean photo = false;
+                        if (pos != -1) {
+                            CheckItemModel itm = storeData.get(pos);
+                            check = itm.isCheck();
+                            photo = itm.isPhoto();
+                        }
+                        ArhiveItemModel aItem = new ArhiveItemModel(checkItem.getInt("id"),checkItem.getString("title"),time,check,photo);
                         item.add(aItem);
                     }
                 }

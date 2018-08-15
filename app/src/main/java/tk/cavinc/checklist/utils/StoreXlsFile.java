@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import jxl.Workbook;
@@ -20,6 +21,8 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import tk.cavinc.checklist.data.models.ArhiveHeadModel;
+import tk.cavinc.checklist.ui.activitys.ArhiveActivity;
 
 /**
  * Created by cav on 15.08.18.
@@ -27,15 +30,20 @@ import jxl.write.biff.RowsExceededException;
 
 public class StoreXlsFile {
 
+    private final ArrayList<ArhiveHeadModel> mData;
     private Context mContext;
     private String mOutPath;
     private String mFileName;
 
-    public StoreXlsFile(Context context, String outPath, String fileName){
+
+    public StoreXlsFile(Context context, String outPath, String fileName, ArrayList<ArhiveHeadModel> prepareData){
         mContext = context;
         mOutPath = outPath;
         mFileName = fileName;
+        mData = prepareData;
     }
+
+
 
     public void write(){
         File output = new File(mOutPath,mFileName);
@@ -88,7 +96,6 @@ public class StoreXlsFile {
         sheet.addCell(new Label(4,3,"21-00",times11format));
         sheet.addCell(new Label(5,3,"01-00",times11format));
         sheet.addCell(new Label(6,3,"05-00",times11format));
-
 
     }
 

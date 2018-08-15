@@ -31,6 +31,15 @@ public class CheckItemModel {
         mCheck = check;
     }
 
+    public CheckItemModel(String time,int groupID,int id, String title, boolean check, boolean photo) {
+        mTime = time;
+        mGroupID = groupID;
+        mId = id;
+        mTitle = title;
+        mCheck = check;
+        mPhoto = photo;
+    }
+
     public CheckItemModel(int groupID, int id, String title, boolean check, boolean photo, String photoName, String comment,String time) {
         mGroupID = groupID;
         mId = id;

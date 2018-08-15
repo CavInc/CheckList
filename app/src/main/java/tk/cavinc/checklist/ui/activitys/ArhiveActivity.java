@@ -81,11 +81,12 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
             if (model.isCheck()) {
                 Log.d("AA","Arhive Name :"+model.getTitle());
                 ArrayList<ArhiveHeadModel> prepareData = new PrepareArhiveData(model.getTitle()).get();
-
+                model.setCheck(false);
+                mAdapter.notifyDataSetChanged();
+                new StoreXlsFile(this,mDataManager.getStorageAppPath(),model.getTitle()+".xls",prepareData).write();
             }
         }
-
-        new StoreXlsFile(this,mDataManager.getStorageAppPath(),"text.xls").write();
+        //new StoreXlsFile(this,mDataManager.getStorageAppPath(),"text.xls", prepareData).write();
     }
 
     @Override
