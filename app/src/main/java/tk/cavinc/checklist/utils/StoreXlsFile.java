@@ -10,6 +10,8 @@ import java.util.Locale;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
+import jxl.format.Border;
+import jxl.format.BorderLineStyle;
 import jxl.write.Label;
 import jxl.write.Number;
 import jxl.write.WritableCellFormat;
@@ -68,12 +70,13 @@ public class StoreXlsFile {
         WritableFont times14font = new WritableFont(WritableFont.TIMES,14,WritableFont.BOLD,true);
         WritableCellFormat times14format = new WritableCellFormat(times14font);
 
-        times14format.setShrinkToFit(true); // растянуть до размера ?
+        //times14format.setShrinkToFit(true); // растянуть до размера ?
 
         WritableFont times11font = new WritableFont(WritableFont.TIMES,11,WritableFont.BOLD,true);
         WritableCellFormat times11format = new WritableCellFormat(times11font);
+        times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
 
-        times11format.setShrinkToFit(true); // растянуть до размера ?
+        //times11format.setShrinkToFit(true); // растянуть до размера ?
 
 
         sheet.addCell(new Label(0,0,"ЛИСТ ПРОВЕРКИ ПРОИЗВОДСТВЕННОГО ЦЕХА",times14format));

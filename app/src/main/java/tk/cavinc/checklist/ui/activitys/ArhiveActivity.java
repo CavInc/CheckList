@@ -15,9 +15,17 @@ import java.util.ArrayList;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.ArhiveHeadModel;
 import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.ui.adapters.ArhiveAdapter;
+import tk.cavinc.checklist.utils.PrepareArhiveData;
 import tk.cavinc.checklist.utils.StoreXlsFile;
+
+/*
+https://automated-testing.info/t/api-dlya-raboty-s-excel/1563/2
+http://romanchekashov.blogspot.com/2014/09/create-excel-file-in-java.html
+https://www.javaworld.com/article/2074940/learn-java/java-app-dev-reading-and-writing-excel-spreadsheets.html
+ */
 
 public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private DataManager mDataManager;
@@ -72,6 +80,8 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
             ArhiveModel model = mAdapter.getItem(i);
             if (model.isCheck()) {
                 Log.d("AA","Arhive Name :"+model.getTitle());
+                ArrayList<ArhiveHeadModel> prepareData = new PrepareArhiveData(model.getTitle()).get();
+
             }
         }
 
