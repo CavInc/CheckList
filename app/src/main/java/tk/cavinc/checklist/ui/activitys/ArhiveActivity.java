@@ -16,6 +16,7 @@ import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
 import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.ui.adapters.ArhiveAdapter;
+import tk.cavinc.checklist.utils.StoreXlsFile;
 
 public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private DataManager mDataManager;
@@ -57,7 +58,14 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
+        if (item.getItemId() == R.id.send_mail) {
+            createXls();
+        }
         return true;
+    }
+
+    private void createXls() {
+        new StoreXlsFile(this,mDataManager.getStorageAppPath(),"text.xls").write();
     }
 
     @Override
