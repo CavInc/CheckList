@@ -3,6 +3,8 @@ package tk.cavinc.checklist.ui.activitys;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +43,13 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
             actionBar.setDisplayHomeAsUpEnabled(true);
            // actionBar.setTitle("Опрос: "+mDateCheck+"  ::  "+mTime);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.arhive_menu, menu);
+        return true;
     }
 
     @Override
