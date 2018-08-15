@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tk.cavinc.checklist.R;
@@ -54,6 +55,12 @@ public class ArhiveAdapter extends ArrayAdapter<ArhiveModel> {
         }
         return row;
     }
+
+    /*
+    public ArrayList<ArhiveModel> getData(){
+
+    }
+    */
 
 
     class ViewHolder {

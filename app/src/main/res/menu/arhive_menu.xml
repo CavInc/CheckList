@@ -6,5 +6,11 @@
         android:id="@+id/send_mail"
         android:title="Отправить по почте"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/send_cloud"
+        android:title="Отправить в облако"/>
+    <item
+        android:id="@+id/delete_arhive"
+        android:title="Удалить архив"/>
 
 </menu>

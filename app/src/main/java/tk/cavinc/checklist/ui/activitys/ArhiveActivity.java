@@ -3,6 +3,7 @@ package tk.cavinc.checklist.ui.activitys;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,7 +65,16 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         return true;
     }
 
+
+    // создаем xls из отмеченных архивов
     private void createXls() {
+        for (int i = 0 ; i<mAdapter.getCount();i++){
+            ArhiveModel model = mAdapter.getItem(i);
+            if (model.isCheck()) {
+                Log.d("AA","Arhive Name :"+model.getTitle());
+            }
+        }
+
         new StoreXlsFile(this,mDataManager.getStorageAppPath(),"text.xls").write();
     }
 
