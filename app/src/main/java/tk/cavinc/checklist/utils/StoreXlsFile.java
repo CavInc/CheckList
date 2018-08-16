@@ -13,6 +13,7 @@ import jxl.WorkbookSettings;
 import jxl.format.Alignment;
 import jxl.format.Border;
 import jxl.format.BorderLineStyle;
+import jxl.format.Colour;
 import jxl.write.Label;
 import jxl.write.Number;
 import jxl.write.WritableCellFormat;
@@ -62,11 +63,6 @@ public class StoreXlsFile {
             createHead(wsheet);
             createBody(wsheet);
 
-            /*
-            Number number = new Number(3, 4, 3.1459);
-            wsheet.addCell(number);
-
-            */
             wworkbook.write();
             wworkbook.close();
 
@@ -105,6 +101,10 @@ public class StoreXlsFile {
         WritableCellFormat times11format = new WritableCellFormat(times11font);
         times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
 
+        WritableCellFormat times11BGformat = new WritableCellFormat(times11font);
+        times11BGformat.setBorder(Border.ALL,BorderLineStyle.THIN);
+        times11BGformat.setBackground(Colour.LIME);
+
         WritableFont times11Boldfont = new WritableFont(WritableFont.TIMES,11,WritableFont.BOLD,true);
         WritableCellFormat times11Boldformat = new WritableCellFormat(times11Boldfont);
 
@@ -126,13 +126,30 @@ public class StoreXlsFile {
                  if (l1.get(k).isCheck()) {
                      val = "Ok";
                  }
-                 sheet.addCell(new Label(ofset_x,ofset_y,val,times11format));
+                 if (l1.get(k).isPhoto()) {
+                     sheet.addCell(new Label(ofset_x,ofset_y,val,times11BGformat));
+                 } else {
+                     sheet.addCell(new Label(ofset_x, ofset_y, val, times11format));
+                 }
                  ofset_x += 1;
                 }
                 ofset_y +=1;
             }
 
         }
+        createFooter(sheet,ofset_y+2);
+    }
+
+    private void createFooter(WritableSheet sheet,int ofset_y) throws WriteException {
+        WritableFont times11font = new WritableFont(WritableFont.TIMES,11);
+        WritableCellFormat times11format = new WritableCellFormat(times11font);
+        times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
+
+        sheet.addCell(new Label(0,ofset_y,"Ответсвенный",times11format));
+        sheet.addCell(new Label(1,ofset_y,"Подпись",times11format));
+        ofset_y +=1;
+        sheet.addCell(new Label(0,ofset_y," ",times11format));
+        sheet.addCell(new Label(1,ofset_y," ",times11format));
     }
 
 }

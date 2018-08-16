@@ -1,8 +1,11 @@
 package tk.cavinc.checklist.ui.activitys;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import tk.cavinc.checklist.R;
@@ -18,6 +23,7 @@ import tk.cavinc.checklist.data.manager.DataManager;
 import tk.cavinc.checklist.data.models.ArhiveHeadModel;
 import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.ui.adapters.ArhiveAdapter;
+import tk.cavinc.checklist.utils.CustomFileNameFilter;
 import tk.cavinc.checklist.utils.PrepareArhiveData;
 import tk.cavinc.checklist.utils.StoreXlsFile;
 
@@ -84,9 +90,39 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                 model.setCheck(false);
                 mAdapter.notifyDataSetChanged();
                 new StoreXlsFile(this,mDataManager.getStorageAppPath(),model.getTitle()+".xls",prepareData).write();
+
             }
         }
+        try {
+            sendMail();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //new StoreXlsFile(this,mDataManager.getStorageAppPath(),"text.xls", prepareData).write();
+    }
+
+    // оправляем по почте
+    private void sendMail() throws IOException {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Архивы проверки");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("<b>Архивы проверки</b>"));
+        emailIntent.setType("application/octet-stream");
+
+
+        String outPath = mDataManager.getStorageAppPath();
+        File outDir = new File(outPath);
+        File[] fileList = outDir.listFiles(new CustomFileNameFilter(".xls"));
+        for (int i = 0; i<fileList.length; i++){
+           // Log.d("AA",fileList[i].getAbsolutePath());
+            //Log.d("AA",fileList[i].getCanonicalPath());
+           // Log.d("AA",Uri.parse("file://"+fileList[i].getCanonicalPath()).toString());
+           // Log.d("AA",fileList[i].toURI().toString());
+            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+fileList[i].getCanonicalPath()));
+        }
+
+
+        startActivity(Intent.createChooser(emailIntent,"Отправить почту"));
+
     }
 
     @Override
