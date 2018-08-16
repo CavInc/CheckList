@@ -2,6 +2,8 @@ package tk.cavinc.checklist.ui.activitys;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -147,8 +149,19 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
            // Log.d("AA",fileList[i].getAbsolutePath());
             //Log.d("AA",fileList[i].getCanonicalPath());
            // Log.d("AA",Uri.parse("file://"+fileList[i].getCanonicalPath()).toString());
-           // Log.d("AA",fileList[i].toURI().toString());
-            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+fileList[i].getCanonicalPath()));
+            Log.d("AA",fileList[i].toURI().toString());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+                Log.d("AA","A6 ? ");
+                Uri fileUri = FileProvider.getUriForFile(this,
+                        this.getApplicationContext().getPackageName() + ".provider", fileList[i]);
+
+                Log.d("AA",fileUri.toString());
+
+                emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                emailIntent.putExtra(Intent.EXTRA_STREAM,fileUri);
+            }else {
+                emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + fileList[i].getCanonicalPath()));
+            }
         }
 
         startActivity(Intent.createChooser(emailIntent,"Отправить почту"));

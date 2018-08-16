@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!-- base color corporative -->
+    <!-- R: 129 G: 181 B:  64 -->
 
     <!-- app color -->
     <color name="app_blue_dark">#0D47A1</color>
