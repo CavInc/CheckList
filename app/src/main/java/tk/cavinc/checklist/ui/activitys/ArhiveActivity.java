@@ -64,6 +64,7 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         if (loginPass.get(0) != null && loginPass.get(1) != null) {
             if (mDataManager.isOnline()) {
                 api = new YandexDiskApi(getResources().getString(R.string.CLIENT_ID));
+                api.setTokenFromCallBackURI(getResources().getString(R.string.CALL_BACK_URL));
                 api.setCredentials(loginPass.get(0), loginPass.get(1));
                 Log.d("AA","YD : "+api.isAuthorization());
                 Log.d("AA","YD : "+api.getAuthorization());
