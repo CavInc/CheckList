@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.vadel.yandexdisk.YandexDiskApi;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +41,14 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
     private ListView mListView;
     private ArhiveAdapter mAdapter;
 
+    private YandexDiskApi api;
+    private ArrayList<String> loginPass;
+
+    {
+        YandexDiskApi.DEBUG = true;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +59,17 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         mListView = findViewById(R.id.arhive_lv);
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mListView.setOnItemClickListener(this);
+
+        loginPass = mDataManager.getPrefManager().getLoginPassword();
+        if (loginPass.get(0) != null && loginPass.get(1) != null) {
+            if (mDataManager.isOnline()) {
+                api = new YandexDiskApi(getResources().getString(R.string.CLIENT_ID));
+                api.setCredentials(loginPass.get(0), loginPass.get(1));
+                Log.d("AA","YD : "+api.isAuthorization());
+                Log.d("AA","YD : "+api.getAuthorization());
+                Log.d("AA","YD : "+api.getToken());
+            }
+        }
 
         setupTools();
     }
@@ -75,8 +96,23 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         }
         if (item.getItemId() == R.id.send_mail) {
             createXls();
+            try {
+                sendMail();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (item.getItemId() == R.id.send_cloud) {
+            createXls();
+            sendCloud();
+
         }
         return true;
+    }
+
+    // оправляем в облако
+    private void sendCloud() {
+
     }
 
 
@@ -93,12 +129,6 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
 
             }
         }
-        try {
-            sendMail();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //new StoreXlsFile(this,mDataManager.getStorageAppPath(),"text.xls", prepareData).write();
     }
 
     // оправляем по почте
@@ -119,7 +149,6 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
            // Log.d("AA",fileList[i].toURI().toString());
             emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+fileList[i].getCanonicalPath()));
         }
-
 
         startActivity(Intent.createChooser(emailIntent,"Отправить почту"));
 
