@@ -22,6 +22,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 import tk.cavinc.checklist.data.models.ArhiveHeadModel;
+import tk.cavinc.checklist.data.models.ArhiveItemModel;
 import tk.cavinc.checklist.ui.activitys.ArhiveActivity;
 
 /**
@@ -59,17 +60,17 @@ public class StoreXlsFile {
             WritableSheet wsheet = wworkbook.createSheet("First Sheet", 0);
 
             createHead(wsheet);
+            createBody(wsheet);
 
+            /*
             Number number = new Number(3, 4, 3.1459);
             wsheet.addCell(number);
+
+            */
             wworkbook.write();
             wworkbook.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (RowsExceededException e) {
-            e.printStackTrace();
-        } catch (WriteException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -97,6 +98,41 @@ public class StoreXlsFile {
         sheet.addCell(new Label(5,3,"01-00",times11format));
         sheet.addCell(new Label(6,3,"05-00",times11format));
 
+    }
+
+    private void createBody(WritableSheet sheet) throws WriteException {
+        WritableFont times11font = new WritableFont(WritableFont.TIMES,11);
+        WritableCellFormat times11format = new WritableCellFormat(times11font);
+        times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
+
+        WritableFont times11Boldfont = new WritableFont(WritableFont.TIMES,11,WritableFont.BOLD,true);
+        WritableCellFormat times11Boldformat = new WritableCellFormat(times11Boldfont);
+
+        int ofset_y = 4;
+        for (int i = 0 ; i< mData.size(); i++){
+            //Log.d("STORE",mData.get(i).getId()+" "+mData.get(i).getTitle());
+            sheet.addCell(new Label(0,ofset_y,mData.get(i).getTitle(),times11Boldformat));
+            ofset_y += 1; // сдвиг на элементы
+
+            ArrayList<ArrayList<ArhiveItemModel>> items = mData.get(i).getItems();
+            for (int j = 0; j< items.size(); j++) {
+                ArrayList<ArhiveItemModel> l1 = items.get(j);
+                int ofset_x = 1;
+                for (int k = 0; k< l1.size(); k++){
+                 if (k == 0) {
+                     sheet.addCell(new Label(0,ofset_y,l1.get(k).getTitle(),times11format));
+                 }
+                 String val = "*";
+                 if (l1.get(k).isCheck()) {
+                     val = "Ok";
+                 }
+                 sheet.addCell(new Label(ofset_x,ofset_y,val,times11format));
+                 ofset_x += 1;
+                }
+                ofset_y +=1;
+            }
+
+        }
     }
 
 }

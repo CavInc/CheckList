@@ -57,11 +57,11 @@ public class PrepareArhiveData {
                 int groupID = quest.getInt("id");
                 String groupTitle = quest.getString("title");
 
-                ArrayList <ArhiveItemModel> item = null;
+                ArrayList<ArrayList<ArhiveItemModel>> items_pos = new ArrayList<>();
 
                 JSONArray jCheck = quest.getJSONArray("check");
                 for (int j=0 ; j<jCheck.length() ; j++){
-                    item = new ArrayList<>();
+                    ArrayList <ArhiveItemModel> item = new ArrayList<>();
                     JSONObject checkItem = jCheck.getJSONObject(j);
                     JSONArray wt =  checkItem.getJSONArray("time_check"); // время
                     String time = null;
@@ -78,8 +78,9 @@ public class PrepareArhiveData {
                         ArhiveItemModel aItem = new ArhiveItemModel(checkItem.getInt("id"),checkItem.getString("title"),time,check,photo);
                         item.add(aItem);
                     }
+                    items_pos.add(item);
                 }
-                rec.add(new ArhiveHeadModel(groupID,groupTitle,item));
+                rec.add(new ArhiveHeadModel(groupID,groupTitle,items_pos)); // добавили группу опроса
             }
 
         } catch (JSONException e) {

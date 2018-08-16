@@ -9,9 +9,9 @@ import java.util.ArrayList;
 public class ArhiveHeadModel {
     private int mId;
     private String mTitle;
-    private ArrayList<ArhiveItemModel> mItems;
+    private ArrayList<ArrayList<ArhiveItemModel>> mItems;
 
-    public ArhiveHeadModel(int id, String title, ArrayList<ArhiveItemModel> items) {
+    public ArhiveHeadModel(int id, String title, ArrayList<ArrayList<ArhiveItemModel>> items) {
         mId = id;
         mTitle = title;
         mItems = items;
@@ -25,7 +25,7 @@ public class ArhiveHeadModel {
         return mTitle;
     }
 
-    public ArrayList<ArhiveItemModel> getItems() {
+    public ArrayList<ArrayList<ArhiveItemModel>> getItems() {
         return mItems;
     }
 }
