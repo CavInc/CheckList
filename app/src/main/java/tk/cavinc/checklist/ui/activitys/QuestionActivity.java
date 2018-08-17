@@ -93,6 +93,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 api = new YandexDiskApi(CLIENT_ID);
                 api.setCredentials(loginPass.get(0), loginPass.get(1));
                 Log.d(TAG, "XF : " + api.isAuthorization());
+                Log.d(TAG," OAUTH :" +api.getOAthRequestUrl());
+
                 yandexFolder = "/CheckList/" + mLongData.replaceAll("-", "") + "/";
                 if (api.isAuthorization()) {
                     sendDirect = true;
@@ -269,7 +271,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
         Log.d(TAG," ITEM "+selectData.getTitle());
         if (selectData.isPhoto() ) {
-            loadPhoto(groupID,childID);
+            loadPhoto(groupID,childID,selectData.getTitle());
         }else {
             selectData.setCheck(! selectData.isCheck());
             storeData();
@@ -287,10 +289,10 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         }
     };
 
-    private void loadPhoto(int group,int pos){
+    private void loadPhoto(int group, int pos, String title){
         Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            mPhotoFile = createFile(group,pos);
+            mPhotoFile = createFile(group,pos,title);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -299,9 +301,9 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         startActivityForResult(photoIntent,ConstantManager.REQUEST_CAMERA_PICTURE);
     }
 
-    private File createFile(int group,int pos) throws IOException {
-        String timeStamp = Utils.dateToStr("yyyyyMMdd",new Date());
-        String fname = String.valueOf(group)+"_"+String.valueOf(pos)+"_"+timeStamp+"_"+mTime.replaceAll(":","");
+    private File createFile(int group, int pos, String title) throws IOException {
+        String timeStamp = Utils.dateToStr("ddMMyy",new Date());
+        String fname = timeStamp+"_"+mTime.replaceAll(":","")+"_"+title.replaceAll(":","").trim();
         if (mDataManager.isExternalStorageWritable()){
             String path = mDataManager.getStorageAppPath();
             //File pathPath = mDataManager.getStoragePath();
@@ -341,7 +343,9 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         adapter.notifyDataSetChanged();
     }
 
+    // оправили на YD
     private void sendFileInYandexDisk() throws FileNotFoundException {
+        // формат имени - файла dd.MM.yy-time-цех
         final InputStream io = new FileInputStream(mPhotoFile);
         new Thread(new Runnable() {
             @Override

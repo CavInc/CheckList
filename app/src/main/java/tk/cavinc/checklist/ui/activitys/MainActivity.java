@@ -103,6 +103,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this,ArhiveActivity.class);
             startActivity(intent);
         }
+        if (item.getItemId() == R.id.menu_login) {
+            LoginDialog dialog = new LoginDialog();
+            dialog.setOnLoginDialogListener(mListener);
+            dialog.show(getFragmentManager(),"LD");
+        }
         return true;
     }
 

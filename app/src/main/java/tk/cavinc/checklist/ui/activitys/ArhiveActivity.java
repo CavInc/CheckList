@@ -19,7 +19,10 @@ import android.widget.ListView;
 import org.vadel.yandexdisk.YandexDiskApi;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import tk.cavinc.checklist.R;
@@ -107,15 +110,40 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         }
         if (item.getItemId() == R.id.send_cloud) {
             createXls();
-            sendCloud();
+            try {
+                sendCloud();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
         return true;
     }
 
     // оправляем в облако
-    private void sendCloud() {
+    private void sendCloud() throws IOException {
+        if (api.isAuthorization()) {
+            String outPath = mDataManager.getStorageAppPath();
+            File outDir = new File(outPath);
+            final File[] fileList = outDir.listFiles(new CustomFileNameFilter(".xls"));
+            for (int i = 0; i<fileList.length; i++){
+                Log.d("AA","Files "+fileList[i].getCanonicalPath());
+                final InputStream io = new FileInputStream(fileList[i].getCanonicalFile());
+                final int finalI = i;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            boolean res = api.uploadFile("//CheckList/"+fileList[finalI].getName().replaceAll("-","_"),io,fileList[finalI].length());
+                            Log.d("AA","UPLOAD FILE :"+res);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
 
+            }
+        }
     }
 
 
@@ -190,4 +218,5 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         mAdapter.getItem(position).setCheck(!mAdapter.getItem(position).isCheck());
         mAdapter.notifyDataSetChanged();
     }
+
 }

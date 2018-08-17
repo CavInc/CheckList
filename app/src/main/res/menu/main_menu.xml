@@ -3,4 +3,7 @@
     <item
         android:id="@+id/menu_arhive"
         android:title="Архив"/>
+    <item
+        android:id="@+id/menu_login"
+        android:title="Логин для Yandex Disk"/>
 </menu>

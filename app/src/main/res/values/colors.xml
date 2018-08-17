@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <!-- <color name="colorPrimary">#3F51B5</color> -->
+    <color name="colorPrimary">#81B540</color>
+    <!-- <color name="colorPrimaryDark">#303F9F</color> -->
+    <color name="colorPrimaryDark">#599b08</color>
     <color name="colorAccent">#FF4081</color>
 
     <!-- base color corporative -->
@@ -12,5 +14,9 @@
     <color name="app_blue">#1976D2</color>
     <color name="app_blue_ligth">#42A5F5</color>
     <color name="app_blur_200">#90CAF9</color>
+
+    <color name="app_green">#81B540</color>
+    <color name="app_green_dark">#5b9f06</color>
+    <color name="app_green_ligth">#9dcc62</color>
 
 </resources>

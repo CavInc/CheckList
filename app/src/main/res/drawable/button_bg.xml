@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/app_blue_dark" android:state_pressed="true"/>
-    <item android:drawable="@color/app_blue" android:state_focused="true"/>
-    <item android:drawable="@color/app_blue_ligth" android:state_enabled="false"/>
-    <item android:drawable="@color/app_blue" />
+    <item android:drawable="@color/app_green_dark" android:state_pressed="true"/>
+    <item android:drawable="@color/app_green" android:state_focused="true"/>
+    <item android:drawable="@color/app_green_ligth" android:state_enabled="false"/>
+    <item android:drawable="@color/app_green" />
 </selector>
