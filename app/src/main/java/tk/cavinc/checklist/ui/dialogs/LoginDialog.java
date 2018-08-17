@@ -40,7 +40,7 @@ public class LoginDialog extends DialogFragment {
                         if (mOnLoginDialogListener != null) {
                             mOnLoginDialogListener.onLogin(mLogin.getText().toString(),mPasswd.getText().toString());
                         }
-
+                        dismiss();
                     }
                 });
         return builder.create();

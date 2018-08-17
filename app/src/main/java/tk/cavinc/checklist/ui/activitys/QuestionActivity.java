@@ -1,8 +1,11 @@
 package tk.cavinc.checklist.ui.activitys;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -299,7 +302,16 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
             e.printStackTrace();
             return;
         }
-        photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+            Uri fileUri = FileProvider.getUriForFile(this,
+                    this.getApplicationContext().getPackageName() + ".provider", mPhotoFile);
+            photoIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            photoIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+        } else {
+            photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+        }
         startActivityForResult(photoIntent,ConstantManager.REQUEST_CAMERA_PICTURE);
     }
 

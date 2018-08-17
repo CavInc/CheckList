@@ -115,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
-        checkAndSetPermission();
-
         ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
 
         setCountButton(rec);
@@ -127,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dialog.setOnLoginDialogListener(mListener);
             dialog.show(getFragmentManager(),"LD");
         }
+
+        checkAndSetPermission();
     }
 
 
