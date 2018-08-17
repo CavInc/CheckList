@@ -266,12 +266,14 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     public boolean onChildClick(ExpandableListView expandableListView, View view, int groupID, int childID, long id) {
         Log.d(TAG,"POST IS "+groupID+" "+childID+" "+id);
 
+        HashMap group = (HashMap) adapter.getGroup(groupID);
+
         Object fmd = adapter.getChild(groupID, childID);
         selectData = (CheckItemModel) ((HashMap) fmd).get("itemText");
 
         Log.d(TAG," ITEM "+selectData.getTitle());
         if (selectData.isPhoto() ) {
-            loadPhoto(groupID,childID,selectData.getTitle());
+            loadPhoto(groupID,childID, String.valueOf(group.get("groupName")));
         }else {
             selectData.setCheck(! selectData.isCheck());
             storeData();
@@ -353,6 +355,10 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 boolean res = api.uploadFile(yandexFolder + mPhotoFile.getName(), io, mPhotoFile.length());
                 //TODO проверяем и если не ушло то ставим флаг
                 Log.d(TAG," SEND FLG :"+res);
+                if (res) {
+                    mDataManager.getDB().setPhotoStatus(selectData,mLongData,mTime);
+                    mPhotoFile.delete();
+                }
             }
         }).start();
     }

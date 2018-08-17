@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.vadel.yandexdisk.YandexDiskApi;
 
@@ -136,6 +137,10 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                         try {
                             boolean res = api.uploadFile("//CheckList/"+fileList[finalI].getName().replaceAll("-","_"),io,fileList[finalI].length());
                             Log.d("AA","UPLOAD FILE :"+res);
+                            if (res) {
+                                Toast.makeText(ArhiveActivity.this,"Файл оправлен в облако",Toast.LENGTH_SHORT).show();
+                                fileList[finalI].delete();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

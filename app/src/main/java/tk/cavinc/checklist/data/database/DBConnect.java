@@ -128,7 +128,9 @@ public class DBConnect {
         open();
         ContentValues values = new ContentValues();
         values.put("photo_send",1);
-        database.update(DBHelper.CHECKED,values,"",new String[]{});
+        database.update(DBHelper.CHECKED,values,
+                "create_date=? and check_time=? and check_group=? and check_item=?",
+                new String[]{data,time, String.valueOf(model.getGroupID()), String.valueOf(model.getId())});
         close();
     }
 
