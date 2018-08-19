@@ -6,4 +6,6 @@
     <string name="CLIENT_ID">00a1d2b7031c483a892ccbef3c4bd13c</string>
     <string name="CLIENT_PASS">dbf0f74f75e24723afd94f4b2a0aaec5</string>
     <string name="CALL_BACK_URL">https://yx00a1d2b7031c483a892ccbef3c4bd13c.oauth.yandex.ru/auth/finish?platform=android</string>
+    <string name="dialog_no">Нет</string>
+    <string name="dialog_yes">Да</string>
 </resources>

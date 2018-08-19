@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
 
-        setCountButton(rec);
+        //TODO не забыть раскоментировать
+        //setCountButton(rec);
 
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
         if (loginPass.get(0) == null && loginPass.get(1) == null) {

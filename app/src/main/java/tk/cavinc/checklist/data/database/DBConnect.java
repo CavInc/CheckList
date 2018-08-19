@@ -134,4 +134,11 @@ public class DBConnect {
         close();
     }
 
+    // удаляем архив
+    public void deleteArhive(String arhive){
+        open();
+        database.delete(DBHelper.CHECKED,"create_date=?",new String[]{arhive});
+        close();
+    }
+
 }

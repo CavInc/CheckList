@@ -1,10 +1,12 @@
 package tk.cavinc.checklist.ui.activitys;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -118,7 +120,32 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
             }
 
         }
+        if (item.getItemId() == R.id.delete_arhive) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Удаление")
+                    .setMessage("Удаляем архив(вы)\nВы уверены ?")
+                    .setNegativeButton(R.string.dialog_no,null)
+                    .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteArhive();
+                        }
+                    })
+                    .show();
+        }
         return true;
+    }
+
+    private void deleteArhive() {
+        for (int i = 0 ; i<mAdapter.getCount();i++) {
+            ArhiveModel model = mAdapter.getItem(i);
+            if (model.isCheck()) {
+                Log.d("AA", "Arhive Name :" + model.getTitle());
+                mDataManager.getDB().deleteArhive(model.getTitle());
+                mAdapter.remove(model);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     // оправляем в облако
