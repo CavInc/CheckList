@@ -1,6 +1,7 @@
 package tk.cavinc.checklist.ui.activitys;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -14,18 +15,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.vadel.yandexdisk.YandexDiskApi;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
-import tk.cavinc.checklist.data.models.CheckItemModel;
+import tk.cavinc.checklist.data.models.ArhiveHeadModel;
 import tk.cavinc.checklist.data.models.CountTimeModel;
 import tk.cavinc.checklist.ui.dialogs.LoginDialog;
 import tk.cavinc.checklist.utils.ConstantManager;
+import tk.cavinc.checklist.utils.PrepareArhiveData;
+import tk.cavinc.checklist.utils.StoreXlsFile;
 import tk.cavinc.checklist.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBt0100;
     private Button mBt0500;
 
-
+    private YandexDiskApi api;
+    private boolean lockDialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDataManager = DataManager.getInstance();
 
         Date nowDate = new Date();
+        //TODO а зедся надо проверять прешли ли мы через 0 если вдруг запустили систему ночью
+
         mLongData = Utils.dateToStr("yyyy-MM-dd",nowDate);
         mShortData = Utils.dateToStr("dd.MM.yy",nowDate);
 
@@ -121,13 +132,69 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //setCountButton(rec);
 
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
-        if (loginPass.get(0) == null && loginPass.get(1) == null) {
+        if (!lockDialog && loginPass.get(0) == null && loginPass.get(1) == null) {
+            lockDialog = true;
             LoginDialog dialog = new LoginDialog();
             dialog.setOnLoginDialogListener(mListener);
             dialog.show(getFragmentManager(),"LD");
         }
 
         checkAndSetPermission();
+        // TODO для проверки
+        if (getCountTwo(rec,"05:00")){
+            //TODO проверять оправляли ли уже или нет
+            String lastSend = mDataManager.getPrefManager().getLastSendFile();
+            if (!lastSend.equals(mLongData)) {
+                try {
+                    sendYandexDisk();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    //TODO запихать в AcyncTask ?
+    private void sendYandexDisk() throws FileNotFoundException {
+
+        ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
+        if (loginPass.get(0) != null && loginPass.get(1) != null) {
+            if (mDataManager.isOnline()) {
+                api = new YandexDiskApi(getResources().getString(R.string.CLIENT_ID));
+                api.setTokenFromCallBackURI(getResources().getString(R.string.CALL_BACK_URL));
+                api.setCredentials(loginPass.get(0), loginPass.get(1));
+
+                // данные
+                ArrayList<ArhiveHeadModel> prepareData = new PrepareArhiveData(mLongData).get();
+                new StoreXlsFile(this,mDataManager.getStorageAppPath(),mLongData+".xls",prepareData).write();
+                final File sendFile = new File(mDataManager.getStorageAppPath()+"/"+mLongData+".xls");
+                final InputStream io = new FileInputStream(sendFile);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean res = api.uploadFile("//CheckList/"+sendFile.getName().replaceAll("-","_"),io,sendFile.length());
+                        if (res) {
+                            mTextView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,
+                                            "Файл оправлен в облако\n"+sendFile.getName(),Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            mDataManager.getPrefManager().setLastSendFile(mLongData);
+                            sendFile.delete();
+                        }
+                    }
+                }).start();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Внимание")
+                        .setMessage("Не включена передача данных")
+                        .setNegativeButton(R.string.dialog_close,null);
+            }
+        }
+
     }
 
 
@@ -198,7 +265,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (!getCountTwo(rec,"05:00")) {
+        if (getCountTwo(rec,"05:00")) {
+            // TODO если все проверено то оправить данные в облако
 
         }
 

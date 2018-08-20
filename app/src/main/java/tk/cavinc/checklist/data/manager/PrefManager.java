@@ -14,6 +14,7 @@ public class PrefManager {
 
     private static final String YANDEX_LOGIN = "YA_LOGIN";
     private static final String YANDEX_PASS = "YA_PASS";
+    private static final String LAST_SEND_FILE = "LAST_SEND_FILE";
     private SharedPreferences mSharedPreferences;
 
     public PrefManager(){
@@ -45,6 +46,17 @@ public class PrefManager {
 
     public int getCountWorkTime(String key){
         return mSharedPreferences.getInt(key,0);
+    }
+
+    // последний автоматически оправленный файл
+    public String getLastSendFile(){
+        return mSharedPreferences.getString(LAST_SEND_FILE,"1907-01-01");
+    }
+
+    public void setLastSendFile(String file){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(LAST_SEND_FILE,file);
+        editor.apply();
     }
 
 
