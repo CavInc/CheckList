@@ -145,7 +145,7 @@ public class StoreXlsFile {
         WritableCellFormat times11format = new WritableCellFormat(times11font);
         times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
 
-        sheet.addCell(new Label(0,ofset_y,"Ответсвенный",times11format));
+        sheet.addCell(new Label(0,ofset_y,"Ответственный",times11format));
         sheet.addCell(new Label(1,ofset_y,"Подпись",times11format));
         ofset_y +=1;
         sheet.addCell(new Label(0,ofset_y," ",times11format));
