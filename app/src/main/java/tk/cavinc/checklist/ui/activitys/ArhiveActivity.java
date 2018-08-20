@@ -165,7 +165,13 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                             boolean res = api.uploadFile("//CheckList/"+fileList[finalI].getName().replaceAll("-","_"),io,fileList[finalI].length());
                             Log.d("AA","UPLOAD FILE :"+res);
                             if (res) {
-                                Toast.makeText(ArhiveActivity.this,"Файл оправлен в облако",Toast.LENGTH_SHORT).show();
+                                mListView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ArhiveActivity.this,
+                                                "Файл оправлен в облако\n"+fileList[finalI].getName(),Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                                 fileList[finalI].delete();
                             }
                         } catch (Exception e) {

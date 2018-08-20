@@ -8,12 +8,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
 import jxl.format.Border;
 import jxl.format.BorderLineStyle;
 import jxl.format.Colour;
+import jxl.format.PageOrientation;
+import jxl.format.VerticalAlignment;
 import jxl.write.Label;
 import jxl.write.Number;
 import jxl.write.WritableCellFormat;
@@ -57,8 +60,10 @@ public class StoreXlsFile {
 
         WritableWorkbook wworkbook;
         try {
-            wworkbook = Workbook.createWorkbook(output);
+            wworkbook = Workbook.createWorkbook(output,wbSettings);
             WritableSheet wsheet = wworkbook.createSheet("First Sheet", 0);
+            wsheet.getSettings().setOrientation(PageOrientation.PORTRAIT); // портретная ориентация
+            wsheet.getSettings().setFitWidth(1);
 
             createHead(wsheet);
             createBody(wsheet);
@@ -74,12 +79,15 @@ public class StoreXlsFile {
     private void createHead(WritableSheet sheet) throws WriteException {
         WritableFont times14font = new WritableFont(WritableFont.TIMES,14,WritableFont.BOLD,true);
         WritableCellFormat times14format = new WritableCellFormat(times14font);
+        times14format.setAlignment(Alignment.CENTRE);
 
         //times14format.setShrinkToFit(true); // растянуть до размера ?
 
         WritableFont times11font = new WritableFont(WritableFont.TIMES,11,WritableFont.BOLD,true);
         WritableCellFormat times11format = new WritableCellFormat(times11font);
         times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
+        times11format.setAlignment(Alignment.CENTRE);
+        times11format.setVerticalAlignment(VerticalAlignment.CENTRE);
 
         //times11format.setShrinkToFit(true); // растянуть до размера ?
 
@@ -94,12 +102,33 @@ public class StoreXlsFile {
         sheet.addCell(new Label(5,3,"01-00",times11format));
         sheet.addCell(new Label(6,3,"05-00",times11format));
 
+        // Настройки отображения
+        sheet.mergeCells(0,0,6,0);
+        sheet.mergeCells(0,2,0,3);
+
+        sheet.mergeCells(1,2,6,2);
+
+        CellView cv = new CellView();
+        cv.setAutosize(true);
+        sheet.setColumnView(0,cv);  // выставили ширину колонки ?
+        sheet.setRowView(0,456); // выстоа первой строки от балды
     }
 
     private void createBody(WritableSheet sheet) throws WriteException {
         WritableFont times11font = new WritableFont(WritableFont.TIMES,11);
         WritableCellFormat times11format = new WritableCellFormat(times11font);
         times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
+
+        times11format.setWrap(true); // перенос по словам
+
+        times11format.setAlignment(Alignment.LEFT);
+        times11format.setVerticalAlignment(VerticalAlignment.TOP);
+
+        WritableCellFormat times11formatCenter = new WritableCellFormat(times11font);
+        times11formatCenter.setBorder(Border.ALL, BorderLineStyle.THIN);
+        times11formatCenter.setAlignment(Alignment.CENTRE);
+        times11formatCenter.setVerticalAlignment(VerticalAlignment.CENTRE);
+
 
         WritableCellFormat times11BGformat = new WritableCellFormat(times11font);
         times11BGformat.setBorder(Border.ALL,BorderLineStyle.THIN);
@@ -129,7 +158,7 @@ public class StoreXlsFile {
                  if (l1.get(k).isPhoto()) {
                      sheet.addCell(new Label(ofset_x,ofset_y,val,times11BGformat));
                  } else {
-                     sheet.addCell(new Label(ofset_x, ofset_y, val, times11format));
+                     sheet.addCell(new Label(ofset_x, ofset_y, val, times11formatCenter));
                  }
                  ofset_x += 1;
                 }
@@ -147,9 +176,17 @@ public class StoreXlsFile {
 
         sheet.addCell(new Label(0,ofset_y,"Ответственный",times11format));
         sheet.addCell(new Label(1,ofset_y,"Подпись",times11format));
+        sheet.mergeCells(1,ofset_y,2,ofset_y);
         ofset_y +=1;
-        sheet.addCell(new Label(0,ofset_y," ",times11format));
+        sheet.addCell(new Label(0,ofset_y,"Заведующий производством ",times11format));
         sheet.addCell(new Label(1,ofset_y," ",times11format));
+        sheet.mergeCells(1,ofset_y,2,ofset_y);
+        ofset_y += 1;
+        sheet.addCell(new Label(0,ofset_y,"Старший ночной смены",times11format));
+        sheet.addCell(new Label(1,ofset_y,"",times11format));
+        sheet.mergeCells(1,ofset_y,2,ofset_y);
+        ofset_y +=1;
+
     }
 
 }
