@@ -23,14 +23,13 @@ import org.vadel.yandexdisk.YandexDiskApi;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
-import tk.cavinc.checklist.data.models.ArhiveHeadModel;
+import tk.cavinc.checklist.data.models.ArhiveDocModel;
 import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.ui.adapters.ArhiveAdapter;
 import tk.cavinc.checklist.utils.CustomFileNameFilter;
@@ -77,6 +76,12 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                 Log.d("AA","YD : "+api.isAuthorization());
                 Log.d("AA","YD : "+api.getAuthorization());
                 Log.d("AA","YD : "+api.getToken());
+            } else {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Внимание")
+                        .setMessage("Не включена передача данных !\n действия по оправке архивов будут невозможны")
+                        .setNegativeButton(R.string.dialog_close,null)
+                        .show();
             }
         }
 
@@ -150,6 +155,7 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
 
     // оправляем в облако
     private void sendCloud() throws IOException {
+        if (api == null) return;
         if (api.isAuthorization()) {
             String outPath = mDataManager.getStorageAppPath();
             File outDir = new File(outPath);
@@ -191,10 +197,12 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
             ArhiveModel model = mAdapter.getItem(i);
             if (model.isCheck()) {
                 Log.d("AA","Arhive Name :"+model.getTitle());
-                ArrayList<ArhiveHeadModel> prepareData = new PrepareArhiveData(model.getTitle()).get();
+                ArhiveDocModel prepareData = new PrepareArhiveData(model.getTitle()).get();
+                //ArrayList<ArhiveHeadModel> prepareData = new PrepareArhiveData(model.getTitle()).get();
                 model.setCheck(false);
                 mAdapter.notifyDataSetChanged();
-                new StoreXlsFile(this,mDataManager.getStorageAppPath(),model.getTitle()+".xls",prepareData).write();
+                new StoreXlsFile(this,mDataManager.getStorageAppPath(),model.getTitle()+".xls",
+                        prepareData.getArhive(),prepareData.getCommentModels()).write();
 
             }
         }

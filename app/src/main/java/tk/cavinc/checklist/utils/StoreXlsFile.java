@@ -26,6 +26,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 import tk.cavinc.checklist.data.models.ArhiveHeadModel;
+import tk.cavinc.checklist.data.models.ArhiveItemCommentModel;
 import tk.cavinc.checklist.data.models.ArhiveItemModel;
 import tk.cavinc.checklist.ui.activitys.ArhiveActivity;
 
@@ -39,16 +40,20 @@ public class StoreXlsFile {
     private Context mContext;
     private String mOutPath;
     private String mFileName;
+    private ArrayList<ArhiveItemCommentModel> mComment;
 
 
-    public StoreXlsFile(Context context, String outPath, String fileName, ArrayList<ArhiveHeadModel> prepareData){
+    public StoreXlsFile(Context context, String outPath, String fileName,
+                        ArrayList<ArhiveHeadModel> prepareData,ArrayList<ArhiveItemCommentModel> comment){
         mContext = context;
         mOutPath = outPath;
         mFileName = fileName;
         mData = prepareData;
+        mComment = comment;
     }
 
 
+    private int current_offset_y;
 
     public void write(){
         File output = new File(mOutPath,mFileName);
@@ -68,11 +73,64 @@ public class StoreXlsFile {
             createHead(wsheet);
             createBody(wsheet);
 
+            if (mComment.size() != 0) {
+                createComment(wsheet);
+            }
+
             wworkbook.write();
             wworkbook.close();
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void createComment(WritableSheet sheet) throws WriteException {
+        sheet.addRowPageBreak(current_offset_y+5);
+        int ofset_y = current_offset_y+6;
+
+        WritableFont times14font = new WritableFont(WritableFont.TIMES,14,WritableFont.BOLD);
+        WritableCellFormat times14Boldformat = new WritableCellFormat(times14font);
+        times14Boldformat.setAlignment(Alignment.CENTRE);
+
+        WritableFont times11font = new WritableFont(WritableFont.TIMES,11,WritableFont.BOLD);
+        WritableCellFormat times11boldformat = new WritableCellFormat(times11font);
+        times11boldformat.setBorder(Border.ALL, BorderLineStyle.THIN);
+        times11boldformat.setAlignment(Alignment.CENTRE);
+        times11boldformat.setVerticalAlignment(VerticalAlignment.CENTRE);
+
+
+
+        sheet.addCell(new Label(0,ofset_y,"ОБНАРУЖЕННЫЕ НЕСООТВЕТСТВИЯ И ПРИНЯТЫЕ МЕРЫ",times14Boldformat));
+        sheet.mergeCells(0,ofset_y,6,ofset_y);
+        ofset_y +=1;
+
+        sheet.addCell(new Label(0,ofset_y,"Объект инспекции ",times11boldformat));
+        sheet.addCell(new Label(1,ofset_y,"Замечания",times11boldformat));
+        sheet.mergeCells(1,ofset_y,3,ofset_y);
+        sheet.addCell(new Label(4,ofset_y,"Цех",times11boldformat));
+        sheet.mergeCells(4,ofset_y,5,ofset_y);
+        sheet.addCell(new Label(6,ofset_y,"Принятые меры",times11boldformat));
+        sheet.mergeCells(6,ofset_y,8,ofset_y);
+        ofset_y +=1;
+
+        WritableCellFormat times11format = new WritableCellFormat(times11font);
+        times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
+
+        times11format.setWrap(true); // перенос по словам
+
+        times11format.setAlignment(Alignment.LEFT);
+        times11format.setVerticalAlignment(VerticalAlignment.TOP);
+
+        for (ArhiveItemCommentModel l : mComment) {
+            sheet.addCell(new Label(0,ofset_y,l.getTitle(),times11format));
+            sheet.addCell(new Label(1,ofset_y,l.getComment(),times11format));
+            sheet.mergeCells(1,ofset_y,3,ofset_y);
+            sheet.addCell(new Label(4,ofset_y,l.getGroupTitle(),times11format));
+            sheet.mergeCells(4,ofset_y,5,ofset_y);
+            sheet.addCell(new Label(6,ofset_y," ",times11format));
+            sheet.mergeCells(6,ofset_y,8,ofset_y);
+            ofset_y +=1;
         }
     }
 
@@ -166,10 +224,10 @@ public class StoreXlsFile {
             }
 
         }
-        createFooter(sheet,ofset_y+2);
+        current_offset_y = createFooter(sheet,ofset_y+2);
     }
 
-    private void createFooter(WritableSheet sheet,int ofset_y) throws WriteException {
+    private int createFooter(WritableSheet sheet,int ofset_y) throws WriteException {
         WritableFont times11font = new WritableFont(WritableFont.TIMES,11);
         WritableCellFormat times11format = new WritableCellFormat(times11font);
         times11format.setBorder(Border.ALL, BorderLineStyle.THIN);
@@ -186,7 +244,7 @@ public class StoreXlsFile {
         sheet.addCell(new Label(1,ofset_y,"",times11format));
         sheet.mergeCells(1,ofset_y,2,ofset_y);
         ofset_y +=1;
-
+        return ofset_y;
     }
 
 }

@@ -1,6 +1,7 @@
 package tk.cavinc.checklist.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +12,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.ArhiveDocModel;
 import tk.cavinc.checklist.data.models.ArhiveHeadModel;
+import tk.cavinc.checklist.data.models.ArhiveItemCommentModel;
 import tk.cavinc.checklist.data.models.ArhiveItemModel;
 import tk.cavinc.checklist.data.models.CheckItemModel;
 
@@ -20,6 +23,7 @@ import tk.cavinc.checklist.data.models.CheckItemModel;
  */
 
 public class PrepareArhiveData {
+    private static final String TAG = "PAD";
     private String argiveName;
     private Context mContext;
     private DataManager mDataManager;
@@ -31,7 +35,9 @@ public class PrepareArhiveData {
     }
 
     // формируем и возвращаем объекст с данными
-    public ArrayList<ArhiveHeadModel> get(){
+    public ArhiveDocModel get(){
+        ArhiveDocModel result = null;
+
         ArrayList<ArhiveHeadModel> rec = new ArrayList<>();
 
         String json = null;
@@ -44,10 +50,12 @@ public class PrepareArhiveData {
             json = new String(buffer, "UTF-8");
         } catch (IOException ex) {
             ex.printStackTrace();
-            return rec;
+            return result;
         }
 
         ArrayList<CheckItemModel> storeData = mDataManager.getDB().getCheckInDate(argiveName);
+
+        ArrayList<ArhiveItemCommentModel> commentData = new ArrayList<>();
 
         try {
             JSONObject obj = new JSONObject(json);
@@ -74,6 +82,9 @@ public class PrepareArhiveData {
                             CheckItemModel itm = storeData.get(pos);
                             check = itm.isCheck();
                             photo = itm.isPhoto();
+                            if (itm.getComment() != null){
+                                commentData.add(new ArhiveItemCommentModel(groupTitle,checkItem.getString("title"),itm.getComment()));
+                            }
                         }
                         ArhiveItemModel aItem = new ArhiveItemModel(checkItem.getInt("id"),checkItem.getString("title"),time,check,photo);
                         item.add(aItem);
@@ -85,9 +96,10 @@ public class PrepareArhiveData {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            return rec;
+            return result;
         }
-        return rec;
+        result = new ArhiveDocModel(rec,commentData);
+        return result;
     }
 
 }

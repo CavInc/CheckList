@@ -2,6 +2,7 @@ package tk.cavinc.checklist.ui.activitys;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -23,11 +24,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.ArhiveDocModel;
 import tk.cavinc.checklist.data.models.ArhiveHeadModel;
 import tk.cavinc.checklist.data.models.CountTimeModel;
 import tk.cavinc.checklist.ui.dialogs.LoginDialog;
@@ -85,6 +89,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBt0100.setOnClickListener(this);
         mBt0500.setOnClickListener(this);
 
+
+        try {
+            if (new SimpleDateFormat("dd.MM.yyy").parse("30.08.2018").before(new Date())) {
+                AlertDialog.Builder dialog =  new AlertDialog.Builder(this);
+                dialog.setTitle(R.string.app_name)
+                        .setMessage("Завершение работы демоверсии")
+                        .setPositiveButton("Закрыть", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        })
+                        .create();
+                dialog.show();
+
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -166,8 +189,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 api.setCredentials(loginPass.get(0), loginPass.get(1));
 
                 // данные
-                ArrayList<ArhiveHeadModel> prepareData = new PrepareArhiveData(mLongData).get();
-                new StoreXlsFile(this,mDataManager.getStorageAppPath(),mLongData+".xls",prepareData).write();
+                ArhiveDocModel prepareData = new PrepareArhiveData(mLongData).get();
+                new StoreXlsFile(this,mDataManager.getStorageAppPath(),mLongData+".xls",
+                        prepareData.getArhive(),prepareData.getCommentModels()).write();
                 final File sendFile = new File(mDataManager.getStorageAppPath()+"/"+mLongData+".xls");
                 final InputStream io = new FileInputStream(sendFile);
                 new Thread(new Runnable() {
