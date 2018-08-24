@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vadel.yandexdisk.YandexDiskApi;
+import org.vadel.yandexdisk.webdav.WebDavFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -98,14 +99,28 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 Log.d(TAG, "XF : " + api.isAuthorization());
                 Log.d(TAG," OAUTH :" +api.getOAthRequestUrl());
 
+                Log.d(TAG,"USER LOGIN :"+api.getUserLogin());
+
                 yandexFolder = "/CheckList/" + mLongData.replaceAll("-", "") + "/";
                 if (api.isAuthorization()) {
                     sendDirect = true;
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            boolean res = api.createFolder(yandexFolder);
-                            Log.d(TAG,"CREATE FOLDER "+res);
+                            boolean res;
+                            ArrayList<WebDavFile> files = api.getFiles("/CheckList");
+                            if (files != null) {
+                                for (int i = 0; i < files.size(); i++) {
+                                    Log.d(TAG, files.get(i).getParentPath());
+                                }
+                                res = api.createFolder(yandexFolder);
+                                Log.d(TAG,"CREATE FOLDER "+res);
+                            } else {
+                                res = api.createFolder("/CheckList");
+                                if (res) {
+                                    res = api.createFolder(yandexFolder);
+                                }
+                            }
                         }
                     }).start();
                 }
