@@ -101,7 +101,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
                 Log.d(TAG,"USER LOGIN :"+api.getUserLogin());
 
-                yandexFolder = "/CheckList/" + mLongData.replaceAll("-", "") + "/";
+                yandexFolder = "/CheckList/" + Utils.pathToData(mLongData) + "/";
                 if (api.isAuthorization()) {
                     sendDirect = true;
                     new Thread(new Runnable() {

@@ -16,4 +16,14 @@ public class Utils {
         return format.parse(date);
     }
 
+    public static String pathToData(String date) {
+        Date dt = null;
+        try {
+            dt = strToDate("yyyy-MM-dd",date);
+        } catch (ParseException e) {
+
+        }
+        return dateToStr("ddMMyyyy",dt);
+    }
+
 }

@@ -53,11 +53,10 @@ public class PrefManager {
         return mSharedPreferences.getString(LAST_SEND_FILE,"1907-01-01");
     }
 
-    public void setLastSendFile(String file){
+    public void setLastSendFile(String file) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(LAST_SEND_FILE,file);
+        editor.putString(LAST_SEND_FILE, file);
         editor.apply();
     }
-
 
 }
