@@ -349,6 +349,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
             case ConstantManager.REQUEST_CAMERA_PICTURE:
                 if (resultCode == RESULT_OK && mPhotoFile !=null){
                     selectData.setPhotoName(mPhotoFile.getName());
+                    // изменяем размер
+                    Utils.resizeImgFile(mPhotoFile.getAbsolutePath());
                     storeData();
                     //adapter.notifyDataSetChanged();
 
