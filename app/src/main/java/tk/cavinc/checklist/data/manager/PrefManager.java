@@ -15,6 +15,7 @@ public class PrefManager {
     private static final String YANDEX_LOGIN = "YA_LOGIN";
     private static final String YANDEX_PASS = "YA_PASS";
     private static final String LAST_SEND_FILE = "LAST_SEND_FILE";
+    private static final String WORK_DATA = "WORK_DATA";
     private SharedPreferences mSharedPreferences;
 
     public PrefManager(){
@@ -57,6 +58,17 @@ public class PrefManager {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(LAST_SEND_FILE, file);
         editor.apply();
+    }
+
+    // рабочая дата
+    public void setWorkData(String data){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(WORK_DATA,data);
+        editor.apply();
+    }
+
+    public String getWorkData(){
+        return mSharedPreferences.getString(WORK_DATA,null);
     }
 
 }

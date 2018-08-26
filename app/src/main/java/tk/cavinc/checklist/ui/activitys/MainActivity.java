@@ -68,8 +68,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Date nowDate = new Date();
         //TODO а зедся надо проверять прешли ли мы через 0 если вдруг запустили систему ночью
+        String workData = mDataManager.getPrefManager().getWorkData();
 
-        
+        if (workData != null) {
+            if (Utils.testData(workData,nowDate)) {
+                mDataManager.getPrefManager().setWorkData(Utils.dateToStr("yyyy-MM-dd",nowDate));
+            } else {
+                try {
+                    nowDate = Utils.strToDate("yyyy-MM-dd",workData);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            mDataManager.getPrefManager().setWorkData(Utils.dateToStr("yyyy-MM-dd",nowDate));
+        }
 
         mLongData = Utils.dateToStr("yyyy-MM-dd",nowDate);
         mShortData = Utils.dateToStr("dd.MM.yy",nowDate);

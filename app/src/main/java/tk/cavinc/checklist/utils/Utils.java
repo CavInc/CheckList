@@ -92,4 +92,31 @@ public class Utils {
 
     }
 
+    // проверяем перешло ли время в следующем дне через 9:00
+    public static boolean testData(String workData,Date currentData){
+        Date wd = null;
+        Date cd = null;
+        String time = Utils.dateToStr("HH",currentData);
+
+        try {
+            wd = strToDate("yyyy-MM-dd",workData);
+            cd = strToDate("yyyy-MM-dd",dateToStr("yyyy-MM-dd",currentData));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (wd.after(cd)) {
+            Log.d("UT","AFTER");
+        }
+        if (wd.before(cd)) {
+            Log.d("UT","BEFORE");
+            if (Integer.parseInt(time)>=9){
+                Log.d("UT","GET 9 UP");
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
 }
