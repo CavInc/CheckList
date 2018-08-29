@@ -7,7 +7,11 @@ import android.util.Log;
 import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.models.CountTimeModel;
 
 public class Utils {
 
@@ -117,6 +121,21 @@ public class Utils {
             }
         }
         return false;
+    }
+
+   public static boolean getCountTwo(ArrayList<CountTimeModel> rec, String time, DataManager dataManager) {
+        int countQuestion = 0;
+        int countRec = 0 ;
+
+        countQuestion = dataManager.getPrefManager().getCountWorkTime(time);
+        int id = rec.indexOf(new CountTimeModel(time,0));
+        if (id != -1){
+            countRec = rec.get(id).getCount();
+        } else {
+            return false;
+        }
+        if (countQuestion > countRec) return false;
+        return true;
     }
 
 }

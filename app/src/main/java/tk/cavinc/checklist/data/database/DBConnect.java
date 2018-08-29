@@ -8,9 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
+import tk.cavinc.checklist.data.manager.DataManager;
 import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.data.models.CheckItemModel;
 import tk.cavinc.checklist.data.models.CountTimeModel;
+import tk.cavinc.checklist.utils.Utils;
 
 /**
  * Created by cav on 02.08.18.
