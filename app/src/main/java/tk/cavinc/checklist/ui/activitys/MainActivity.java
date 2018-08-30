@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private YandexDiskApi api;
     private boolean lockDialog = false;
+    private Bundle store;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mDataManager = DataManager.getInstance();
 
+        store =  getIntent().getExtras();
 
         mBt0900 = findViewById(R.id.bt0900);
         mBt1300 = findViewById(R.id.bt1300);
@@ -141,7 +143,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
-        setWorkDate(new Date());
+        if (store == null) {
+            setWorkDate(new Date());
+        } else {
+            try {
+                mDataManager.getPrefManager().setWorkData(store.getString(ConstantManager.EDIT_DATA));
+                setWorkDate(Utils.strToDate("yyyy-MM-dd",store.getString(ConstantManager.EDIT_DATA)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
         ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
 
@@ -171,6 +182,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (store !=null) {
+            store.clear();
+            store = null;
+        }
+
     }
 
     private void setWorkDate(Date nowDate){

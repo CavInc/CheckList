@@ -32,6 +32,7 @@ import tk.cavinc.checklist.data.manager.DataManager;
 import tk.cavinc.checklist.data.models.ArhiveDocModel;
 import tk.cavinc.checklist.data.models.ArhiveModel;
 import tk.cavinc.checklist.ui.adapters.ArhiveAdapter;
+import tk.cavinc.checklist.utils.ConstantManager;
 import tk.cavinc.checklist.utils.CustomFileNameFilter;
 import tk.cavinc.checklist.utils.PrepareArhiveData;
 import tk.cavinc.checklist.utils.StoreXlsFile;
@@ -274,6 +275,9 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         Log.d(TAG,"LONG");
         ArhiveModel selectItem = (ArhiveModel) adapterView.getItemAtPosition(position);
 
-        return false;
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra(ConstantManager.EDIT_DATA,selectItem.getTitle());
+        startActivity(intent);
+        return true;
     }
 }
