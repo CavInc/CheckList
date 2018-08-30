@@ -52,13 +52,23 @@ public class DBConnect {
     }
 
     // список сохраненных чек листов
-    public ArrayList<ArhiveModel> getArhiveChech(){
+    public ArrayList<ArhiveModel> getArhiveChech(int allCount){
+        boolean allCountFlg = false;
         ArrayList<ArhiveModel> rec = new ArrayList<>();
         open();
-        String sql = "select distinct create_date from "+DBHelper.CHECKED+" order by create_date";
+        /*String sql = "select distinct create_date from "+DBHelper.CHECKED+" order by create_date"; */
+        String sql = "select create_date,sum(checked) from "+DBHelper.CHECKED+" \n" +
+                "where photo_file is null\n" +
+                "group by create_date";
+
         Cursor cursor = database.rawQuery(sql,null);
         while (cursor.moveToNext()){
-            rec.add(new ArhiveModel(cursor.getString(0),false));
+            if (cursor.getInt(1) == allCount) {
+                allCountFlg = true;
+            } else {
+                allCountFlg = false;
+            }
+            rec.add(new ArhiveModel(cursor.getString(0),false,allCountFlg));
         }
         close();
         return rec;
@@ -95,6 +105,21 @@ public class DBConnect {
 
     // количество обработанных записей
     public int getCheckCount(String date,String time) {
+        int res  = 0;
+        open();
+        String sql = "select create_date,check_time,count(1) from check_data\n" +
+                "where create_date='"+date+"'\n" +
+                "group by create_date,check_time";
+        Cursor cursor = database.rawQuery(sql,null);
+        while (cursor.moveToNext()){
+            res = cursor.getInt(2);
+        }
+        close();
+        return res;
+    }
+
+    // количество обработанных записей на дату
+    public int getCheckCount(String date) {
         int res  = 0;
         open();
         String sql = "select create_date,check_time,count(1) from check_data\n" +

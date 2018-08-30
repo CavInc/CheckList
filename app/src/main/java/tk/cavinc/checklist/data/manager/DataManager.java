@@ -122,7 +122,7 @@ public class DataManager {
 
                     }else {
                         for (int k = 0; k < wt.length(); k++) {
-                            if (wt.get(k) == 1) {
+                            if ((int) wt.get(k) == 1) {
                              count += 1;
                             }
                         }

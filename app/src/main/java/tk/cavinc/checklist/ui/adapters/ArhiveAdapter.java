@@ -42,6 +42,7 @@ public class ArhiveAdapter extends ArrayAdapter<ArhiveModel> {
             holder = new ViewHolder();
             holder.mTitle = row.findViewById(R.id.arhive_title);
             holder.mChekImg = row.findViewById(R.id.arhive_check);
+            holder.mAllCountImg = row.findViewById(R.id.arhive_all);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -52,6 +53,11 @@ public class ArhiveAdapter extends ArrayAdapter<ArhiveModel> {
             holder.mChekImg.setVisibility(View.VISIBLE);
         } else {
             holder.mChekImg.setVisibility(View.GONE);
+        }
+        if (rec.isAllCheck()) {
+            holder.mAllCountImg.setVisibility(View.VISIBLE);
+        } else {
+            holder.mAllCountImg.setVisibility(View.GONE);
         }
         return row;
     }
@@ -66,6 +72,7 @@ public class ArhiveAdapter extends ArrayAdapter<ArhiveModel> {
     class ViewHolder {
         public TextView mTitle;
         public ImageView mChekImg;
+        public ImageView mAllCountImg;
     }
 
 }

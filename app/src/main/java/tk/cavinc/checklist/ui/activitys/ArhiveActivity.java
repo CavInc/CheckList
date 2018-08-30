@@ -75,7 +75,9 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                 api.setCredentials(loginPass.get(0), loginPass.get(1));
                 Log.d("AA","YD : "+api.isAuthorization());
                 Log.d("AA","YD : "+api.getAuthorization());
-                Log.d("AA","YD : "+api.getToken());
+
+                Log.d("AA,","LOGIN : "+api.getUserLogin());
+
             } else {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
                 builder.setTitle("Внимание")
@@ -249,7 +251,7 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void updateUI(){
-        ArrayList<ArhiveModel> data = mDataManager.getDB().getArhiveChech();
+        ArrayList<ArhiveModel> data = mDataManager.getDB().getArhiveChech(mDataManager.getAllQuestionCount());
         if (mAdapter == null ){
             mAdapter = new ArhiveAdapter(this,R.layout.arhive_item,data);
             mListView.setAdapter(mAdapter);

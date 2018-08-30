@@ -7,7 +7,8 @@ package tk.cavinc.checklist.data.models;
 public class ArhiveModel {
     private String mTitle;
     private boolean mCheck;
-    private boolean mAllCheck;
+    private boolean mAllCheck = false;
+    private int count;
 
     public ArhiveModel(String title, boolean check) {
         mTitle = title;
@@ -18,6 +19,12 @@ public class ArhiveModel {
         mTitle = title;
         mCheck = check;
         mAllCheck = allCheck;
+    }
+
+    public ArhiveModel(String title, boolean check, int count) {
+        mTitle = title;
+        mCheck = check;
+        this.count = count;
     }
 
     public String getTitle() {
@@ -38,5 +45,9 @@ public class ArhiveModel {
 
     public void setAllCheck(boolean allCheck) {
         mAllCheck = allCheck;
+    }
+
+    public int getCount() {
+        return count;
     }
 }

@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getAllCount();
 
         //TODO не забыть раскоментировать
-        //setCountButton(rec);
+        setCountButton(rec);
 
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
         if (!lockDialog && loginPass.get(0) == null && loginPass.get(1) == null) {
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         checkAndSetPermission();
         // TODO для проверки
-        if (Utils.getCountTwo(rec,"05:00",mDataManager)){
+        if (getCountTwo(rec,"05:00")){
             //TODO проверять оправляли ли уже или нет
             String lastSend = mDataManager.getPrefManager().getLastSendFile();
             if (!lastSend.equals(mLongData)) {
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (!Utils.getCountTwo(rec,"09:00",mDataManager)){
+        if (getCountTwo(rec,"09:00")){
             mBt1300.setEnabled(false);
             mBt1700.setEnabled(false);
             mBt2100.setEnabled(false);
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (!Utils.getCountTwo(rec,"13:00",mDataManager)) {
+        if (getCountTwo(rec,"13:00")) {
             mBt1700.setEnabled(false);
             mBt2100.setEnabled(false);
             mBt0100.setEnabled(false);
@@ -301,25 +301,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (!Utils.getCountTwo(rec,"17:00",mDataManager)) {
+        if (getCountTwo(rec,"17:00")) {
             mBt2100.setEnabled(false);
             mBt0100.setEnabled(false);
             mBt0500.setEnabled(false);
             return;
         }
 
-        if (!Utils.getCountTwo(rec,"21:00",mDataManager)) {
+        if (getCountTwo(rec,"21:00")) {
             mBt0100.setEnabled(false);
             mBt0500.setEnabled(false);
             return;
         }
 
-        if (!Utils.getCountTwo(rec,"01:00",mDataManager)) {
+        if (getCountTwo(rec,"01:00")) {
             mBt0500.setEnabled(false);
             return;
         }
 
-        if (Utils.getCountTwo(rec,"05:00",mDataManager)) {
+        if (getCountTwo(rec,"05:00")) {
             // TODO если все проверено то оправить данные в облако
 
         }
