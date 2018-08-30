@@ -43,6 +43,7 @@ https://www.javaworld.com/article/2074940/learn-java/java-app-dev-reading-and-wr
  */
 
 public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener{
+    private static final String TAG = "AA";
     private DataManager mDataManager;
 
     private ListView mListView;
@@ -66,6 +67,7 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         mListView = findViewById(R.id.arhive_lv);
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mListView.setOnItemClickListener(this);
+        mListView.setOnItemLongClickListener(this);
 
         loginPass = mDataManager.getPrefManager().getLoginPassword();
         if (loginPass.get(0) != null && loginPass.get(1) != null) {
@@ -73,10 +75,10 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                 api = new YandexDiskApi(getResources().getString(R.string.CLIENT_ID));
                 api.setTokenFromCallBackURI(getResources().getString(R.string.CALL_BACK_URL));
                 api.setCredentials(loginPass.get(0), loginPass.get(1));
-                Log.d("AA","YD : "+api.isAuthorization());
-                Log.d("AA","YD : "+api.getAuthorization());
+                Log.d(TAG,"YD : "+api.isAuthorization());
+                Log.d(TAG,"YD : "+api.getAuthorization());
 
-                Log.d("AA,","LOGIN : "+api.getUserLogin());
+                Log.d(TAG,"LOGIN : "+api.getUserLogin());
 
             } else {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -269,6 +271,9 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Log.d(TAG,"LONG");
+        ArhiveModel selectItem = (ArhiveModel) adapterView.getItemAtPosition(position);
+
         return false;
     }
 }
