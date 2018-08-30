@@ -42,7 +42,7 @@ http://romanchekashov.blogspot.com/2014/09/create-excel-file-in-java.html
 https://www.javaworld.com/article/2074940/learn-java/java-app-dev-reading-and-writing-excel-spreadsheets.html
  */
 
-public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener{
     private DataManager mDataManager;
 
     private ListView mListView;
@@ -267,4 +267,8 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        return false;
+    }
 }

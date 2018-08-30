@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getAllCount();
 
         //TODO не забыть раскоментировать
-        setCountButton(rec);
+        //setCountButton(rec);
 
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
         if (!lockDialog && loginPass.get(0) == null && loginPass.get(1) == null) {
