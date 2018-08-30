@@ -166,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ArrayList<CountTimeModel> rec = mDataManager.getDB().getCountAll(mLongData);
 
+        getAllCount();
+
         //TODO не забыть раскоментировать
         //setCountButton(rec);
 
@@ -190,7 +192,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+    }
 
+    private void getAllCount(){
+        if (mDataManager.getPrefManager().getAllQuestionCount() == 0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int count = mDataManager.getAllQuestionCount();
+                    mDataManager.getPrefManager().setAllQuestionCount(count);
+                }
+            }).start();
+        }
     }
 
     //TODO запихать в AcyncTask ?

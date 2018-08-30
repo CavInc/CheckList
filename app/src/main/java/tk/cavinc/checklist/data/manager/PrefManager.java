@@ -16,6 +16,7 @@ public class PrefManager {
     private static final String YANDEX_PASS = "YA_PASS";
     private static final String LAST_SEND_FILE = "LAST_SEND_FILE";
     private static final String WORK_DATA = "WORK_DATA";
+    private static final String ALL_COUNT = "ALL_COUNT";
     private SharedPreferences mSharedPreferences;
 
     public PrefManager(){
@@ -69,6 +70,16 @@ public class PrefManager {
 
     public String getWorkData(){
         return mSharedPreferences.getString(WORK_DATA,null);
+    }
+
+    public int getAllQuestionCount(){
+        return mSharedPreferences.getInt(ALL_COUNT,0);
+    }
+
+    public void setAllQuestionCount(int count){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(ALL_COUNT,count);
+        editor.apply();
     }
 
 }
