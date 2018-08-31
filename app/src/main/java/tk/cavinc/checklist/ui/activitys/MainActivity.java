@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private YandexDiskApi api;
     private boolean lockDialog = false;
     private Bundle store;
+    private String sessionDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (store != null) {
+            setupTools();
+        }
+    }
+
+    private void setupTools() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            //actionBar.setSubtitle(mTime);
+        }
     }
 
     @Override
@@ -120,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (store != null) return super.onCreateOptionsMenu(menu);
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
@@ -127,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
         if (item.getItemId() == R.id.menu_arhive) {
             Intent intent = new Intent(this,ArhiveActivity.class);
             startActivity(intent);
@@ -147,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setWorkDate(new Date());
         } else {
             try {
+                sessionDate = mDataManager.getPrefManager().getWorkData();
                 mDataManager.getPrefManager().setWorkData(store.getString(ConstantManager.EDIT_DATA));
                 setWorkDate(Utils.strToDate("yyyy-MM-dd",store.getString(ConstantManager.EDIT_DATA)));
             } catch (ParseException e) {
@@ -188,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         if (store !=null) {
+            mDataManager.getPrefManager().setWorkData(sessionDate);
             store.clear();
             store = null;
         }

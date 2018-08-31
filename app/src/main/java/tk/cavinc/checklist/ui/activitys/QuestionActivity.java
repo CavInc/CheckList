@@ -68,6 +68,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
     private YandexDiskApi api;
     private String yandexFolder;
+    private ActionBar actionBar;
 
     {
         YandexDiskApi.DEBUG = true;
@@ -137,7 +138,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     }
 
     public void setupTools(){
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         if (actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("Опрос: "+mDateCheck+" - "+mTime);
@@ -268,10 +269,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Log.d(TAG,"POS :"+position);
         Object model = adapterView.getItemAtPosition(position);
         selectData = (CheckItemModel) ((HashMap) model).get("itemText");
-        Log.d(TAG,"ITEM "+selectData.getTitle());
         CommentDialog dialog = new CommentDialog();
         dialog.setDialogListener(mCommentDialogListener);
         dialog.show(getFragmentManager(),"CD");
@@ -282,7 +281,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
     @Override
     public boolean onChildClick(ExpandableListView expandableListView, View view, int groupID, int childID, long id) {
-        Log.d(TAG,"POST IS "+groupID+" "+childID+" "+id);
+        //Log.d(TAG,"POST IS "+groupID+" "+childID+" "+id);
 
         HashMap group = (HashMap) adapter.getGroup(groupID);
 
