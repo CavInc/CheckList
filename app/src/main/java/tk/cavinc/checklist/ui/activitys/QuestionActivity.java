@@ -69,6 +69,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private YandexDiskApi api;
     private String yandexFolder;
     private ActionBar actionBar;
+    private int checkedCount = 0;
 
     {
         YandexDiskApi.DEBUG = true;
@@ -133,8 +134,9 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
 
 
         costructData();
-
         setupTools();
+
+        actionBar.setSubtitle("Не пройдено :"+String.valueOf(countItem - checkedCount));
     }
 
     public void setupTools(){
@@ -214,6 +216,9 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                         int pos = storeData.indexOf(mx.get("itemText"));
 
                         if (pos != -1) {
+                            if (storeData.get(0).isCheck()) {
+                                checkedCount += 1;
+                            }
                             mx.get("itemText").setCheck(storeData.get(pos).isCheck());
                             mx.get("itemText").setComment(storeData.get(pos).getComment());
                             mx.get("itemText").setPhotoName(storeData.get(pos).getPhotoName());
@@ -264,6 +269,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
             mExpandList.expandGroup(i);
         }
 
+
     }
 
 
@@ -294,6 +300,12 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         }else {
             selectData.setCheck(! selectData.isCheck());
             storeData();
+            if (selectData.isCheck()) {
+                checkedCount += 1;
+            } else {
+                checkedCount -= 1;
+            }
+            actionBar.setSubtitle("Не пройдено :"+String.valueOf(countItem - checkedCount));
         }
         //adapter.notifyDataSetChanged();
         return false;

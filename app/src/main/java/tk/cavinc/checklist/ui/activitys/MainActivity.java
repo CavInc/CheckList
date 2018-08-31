@@ -270,7 +270,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean res = api.uploadFile("//CheckList/"+sendFile.getName().replaceAll("-","_"),io,sendFile.length());
+                        boolean res = api.uploadFile("//CheckList/"+Utils.pathToData(sendFile.getName())
+                                +"/"+sendFile.getName().replaceAll("-","_"),io,sendFile.length());
                         if (res) {
                             mTextView.post(new Runnable() {
                                 @Override

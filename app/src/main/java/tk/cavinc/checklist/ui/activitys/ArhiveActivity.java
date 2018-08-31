@@ -36,6 +36,7 @@ import tk.cavinc.checklist.utils.ConstantManager;
 import tk.cavinc.checklist.utils.CustomFileNameFilter;
 import tk.cavinc.checklist.utils.PrepareArhiveData;
 import tk.cavinc.checklist.utils.StoreXlsFile;
+import tk.cavinc.checklist.utils.Utils;
 
 /*
 https://automated-testing.info/t/api-dlya-raboty-s-excel/1563/2
@@ -173,7 +174,9 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                     @Override
                     public void run() {
                         try {
-                            boolean res = api.uploadFile("//CheckList/"+fileList[finalI].getName().replaceAll("-","_"),io,fileList[finalI].length());
+                            boolean res = api.uploadFile("//CheckList/"+
+                                    Utils.pathToData(fileList[finalI].getName())+
+                                    '/'+fileList[finalI].getName().replaceAll("-","_"),io,fileList[finalI].length());
                             Log.d("AA","UPLOAD FILE :"+res);
                             if (res) {
                                 mListView.post(new Runnable() {
