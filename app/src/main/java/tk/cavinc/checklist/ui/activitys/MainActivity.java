@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         try {
-            if (new SimpleDateFormat("dd.MM.yyy").parse("15.09.2018").before(new Date())) {
+            if (new SimpleDateFormat("dd.MM.yyy").parse("20.09.2018").before(new Date())) {
                 AlertDialog.Builder dialog =  new AlertDialog.Builder(this);
                 dialog.setTitle(R.string.app_name)
                         .setMessage("Завершение работы демоверсии")

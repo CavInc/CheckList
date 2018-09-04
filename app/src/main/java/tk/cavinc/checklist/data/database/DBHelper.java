@@ -44,13 +44,13 @@ public class DBHelper  extends SQLiteOpenHelper{
             db.execSQL("create table "+CHECKED_HEAD+"(" +
                     "create_data text," +
                     "count_check integer default 0," +
-                    "primary key (create_data)");
+                    "primary key (create_data))");
 
         } else if (oldVersion<2){
             db.execSQL("create table "+CHECKED_HEAD+"(" +
                     "create_data text," +
                     "count_check integer default 0," +
-                    "primary key (create_data)");
+                    "primary key (create_data))");
         }
     }
 }
