@@ -41,16 +41,6 @@ public class DBHelper  extends SQLiteOpenHelper{
                     "photo_send integer default 0," + // фото оправлено на YD
                     "primary key (create_date,check_time,check_group,check_item))");
 
-            db.execSQL("create table "+CHECKED_HEAD+"(" +
-                    "create_data text," +
-                    "count_check integer default 0," +
-                    "primary key (create_data))");
-
-        } else if (oldVersion<2){
-            db.execSQL("create table "+CHECKED_HEAD+"(" +
-                    "create_data text," +
-                    "count_check integer default 0," +
-                    "primary key (create_data))");
         }
     }
 }

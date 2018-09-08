@@ -104,8 +104,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
         if (store != null) {
-            setupTools();
+            String lx = store.getString(ConstantManager.EDIT_DATA);
+            if (lx == null){
+                Log.d(TAG,"LXX");
+            }
+            if (store.getString(ConstantManager.EDIT_DATA) != null) {
+                setupTools();
+            }
         }
     }
 
@@ -113,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ActionBar actionBar = getSupportActionBar();
         if (actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            //actionBar.setSubtitle(mTime);
         }
     }
 
@@ -133,7 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (store != null) return super.onCreateOptionsMenu(menu);
+        if (store != null) {
+            if (store.getString(ConstantManager.EDIT_DATA) != null) {
+                return super.onCreateOptionsMenu(menu);
+            }
+        }
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
@@ -162,14 +173,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         if (store == null) {
+            Log.d(TAG,"STORE : null ");
             setWorkDate(new Date());
         } else {
-            try {
-                sessionDate = mDataManager.getPrefManager().getWorkData();
-                mDataManager.getPrefManager().setWorkData(store.getString(ConstantManager.EDIT_DATA));
-                setWorkDate(Utils.strToDate("yyyy-MM-dd",store.getString(ConstantManager.EDIT_DATA)));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            Log.d(TAG,"STORE : "+store.isEmpty());
+            if (store.getString(ConstantManager.EDIT_DATA) != null) {
+                try {
+                    sessionDate = mDataManager.getPrefManager().getWorkData();
+                    mDataManager.getPrefManager().setWorkData(store.getString(ConstantManager.EDIT_DATA));
+                    setWorkDate(Utils.strToDate("yyyy-MM-dd", store.getString(ConstantManager.EDIT_DATA)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                setWorkDate(new Date());
             }
         }
 
