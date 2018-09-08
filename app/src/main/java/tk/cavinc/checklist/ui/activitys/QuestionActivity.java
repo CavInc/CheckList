@@ -112,15 +112,18 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                             boolean res;
                             ArrayList<WebDavFile> files = api.getFiles("/CheckList");
                             if (files != null) {
+                                /*
                                 for (int i = 0; i < files.size(); i++) {
                                     Log.d(TAG, files.get(i).getParentPath());
                                 }
+                                */
                                 res = api.createFolder(yandexFolder);
                                 Log.d(TAG,"CREATE FOLDER "+res);
                             } else {
                                 res = api.createFolder("/CheckList");
                                 if (res) {
                                     res = api.createFolder(yandexFolder);
+                                    Log.d(TAG,"CREATE FOLDER "+res);
                                 }
                             }
                         }

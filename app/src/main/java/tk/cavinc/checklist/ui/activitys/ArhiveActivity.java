@@ -23,6 +23,7 @@ import org.vadel.yandexdisk.YandexDiskApi;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
 import tk.cavinc.checklist.data.models.ArhiveDocModel;
 import tk.cavinc.checklist.data.models.ArhiveModel;
+import tk.cavinc.checklist.data.models.CheckItemModel;
 import tk.cavinc.checklist.ui.adapters.ArhiveAdapter;
 import tk.cavinc.checklist.utils.ConstantManager;
 import tk.cavinc.checklist.utils.CustomFileNameFilter;
@@ -174,7 +176,19 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                     @Override
                     public void run() {
                         try {
-                            boolean res = api.uploadFile("//CheckList/"+
+                            Log.d("AA","/CheckList/" +
+                                    Utils.pathToData(fileList[finalI].getName()).replaceAll(".xls",""));
+
+                            String px = api.getDownloadUrl("/CheckList/" +
+                                    Utils.pathToData(fileList[finalI].getName()).replaceAll(".xls",""));
+
+                            if (px == null) {
+                                boolean res = api.createFolder("/CheckList/" +
+                                        Utils.pathToData(fileList[finalI].getName()).replaceAll(".xls",""));
+                                Log.d("AA","CREATE FOLDER : "+res);
+                            }
+
+                            boolean res = api.uploadFile("/CheckList/"+
                                     Utils.pathToData(fileList[finalI].getName())+
                                     '/'+fileList[finalI].getName().replaceAll("-","_"),io,fileList[finalI].length());
                             Log.d("AA","UPLOAD FILE :"+res);
@@ -191,9 +205,36 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
+                        try {
+                            sendNoSendPhoto(fileList[finalI].getName());
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 }).start();
 
+            }
+        }
+    }
+
+    // отправка неотправленых фотографий
+    private void sendNoSendPhoto(String date) throws FileNotFoundException {
+        Log.d(TAG,"DT : "+date);
+        String dataFolder = date.replaceAll(".xls", "");
+        String outPath = mDataManager.getStorageAppPath();
+        ArrayList<CheckItemModel> photoList = mDataManager.getDB().getNoSendPhoto(dataFolder);
+        for (CheckItemModel lx : photoList){
+            File photo = new File(outPath+"/"+lx.getPhotoName());
+            InputStream io = new FileInputStream(photo);
+
+            boolean res = api.uploadFile("/CheckList/"+
+                    Utils.pathToData(dataFolder)+"/"+photo.getName(), io, photo.length());
+            Log.d("AA","SEND PHOTO : "+res);
+            if (res) {
+                mDataManager.getDB().setPhotoStatus(lx,dataFolder,lx.getTime());
+                photo.delete();
             }
         }
     }

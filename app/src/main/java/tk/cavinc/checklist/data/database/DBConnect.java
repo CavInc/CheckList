@@ -168,4 +168,37 @@ public class DBConnect {
         close();
     }
 
+    // список не оправленых фотографий
+    public ArrayList<CheckItemModel> getNoSendPhoto(String date){
+        ArrayList<CheckItemModel> rec = new ArrayList<>();
+        open();
+        Cursor cursor = database.query(DBHelper.CHECKED,
+                new String[] {"create_date","check_time","check_group","check_item","photo_file","comment","checked"},
+                "create_date=? and photo_send = 0 and not photo_file is null",new String[]{date},
+                null,null,"check_group,check_item");
+
+        while (cursor.moveToNext()){
+            boolean photo = false;
+            if (cursor.getString(cursor.getColumnIndex("photo_file")) != null) {
+                if (cursor.getString(cursor.getColumnIndex("photo_file")).length() != 0) {
+                    photo = true;
+                }
+            }
+
+            rec.add(new CheckItemModel(
+                    cursor.getInt(cursor.getColumnIndex("check_group")),
+                    cursor.getInt(cursor.getColumnIndex("check_item")),
+                    "",
+                    (cursor.getInt(cursor.getColumnIndex("checked")) == 1 ? true : false),
+                    photo,
+                    cursor.getString(cursor.getColumnIndex("photo_file")),
+                    cursor.getString(cursor.getColumnIndex("comment")),
+                    cursor.getString(cursor.getColumnIndex("check_time"))
+            ));
+        }
+
+        close();
+        return rec;
+    }
+
 }
