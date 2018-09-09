@@ -2,6 +2,7 @@ package tk.cavinc.checklist.ui.activitys;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.icu.text.UFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -70,6 +71,8 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
     private String yandexFolder;
     private ActionBar actionBar;
     private int checkedCount = 0;
+
+    private boolean getPhoto = false;
 
     {
         YandexDiskApi.DEBUG = true;
@@ -158,6 +161,24 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         }
         return true;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // TODO првоерка должа быть
+        if (getPhoto) {
+            getPhoto = false;
+        } else {
+            Log.d(TAG,"check cout : "+checkedCount);
+            Log.d(TAG,"count Item : "+countItem);
+            if (countItem>checkedCount) {
+                Utils.setNotification(QuestionActivity.this, mLongData, mDateCheck, mTime, String.valueOf(mTag));
+            }
+        }
+    }
+
+
 
     private void costructData(){
         String json = null;
@@ -341,6 +362,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         } else {
             photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
         }
+        getPhoto = true;
         startActivityForResult(photoIntent,ConstantManager.REQUEST_CAMERA_PICTURE);
     }
 

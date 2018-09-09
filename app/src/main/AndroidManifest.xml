@@ -24,7 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activitys.QuestionActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ui.activitys.MainActivity">
         </activity>
         <activity android:name=".ui.activitys.ArhiveActivity"
                   android:screenOrientation="portrait"
