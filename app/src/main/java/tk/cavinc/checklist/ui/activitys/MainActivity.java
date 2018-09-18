@@ -86,25 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBt0500.setOnClickListener(this);
 
 
-        try {
-            if (new SimpleDateFormat("dd.MM.yyy").parse("20.09.2018").before(new Date())) {
-                AlertDialog.Builder dialog =  new AlertDialog.Builder(this);
-                dialog.setTitle(R.string.app_name)
-                        .setMessage("Завершение работы демоверсии")
-                        .setPositiveButton("Закрыть", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                finish();
-                            }
-                        })
-                        .create();
-                dialog.show();
-
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
 
         if (store != null) {
             String lx = store.getString(ConstantManager.EDIT_DATA);
