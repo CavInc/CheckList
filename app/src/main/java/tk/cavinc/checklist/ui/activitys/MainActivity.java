@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.content.res.AppCompatResources;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -177,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //TODO не забыть раскоментировать
         //setCountButton(rec);
+        setAlertButton(rec);
 
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
         if (!lockDialog && loginPass.get(0) == null && loginPass.get(1) == null) {
@@ -309,6 +312,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (countQuestion > countRec) return false;
         return true;
+    }
+
+    private void setAlertButton(ArrayList<CountTimeModel> rec){
+        Drawable img = AppCompatResources.getDrawable(this, R.drawable.ic_warning_red_24dp);
+       // mBt1300.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+
+        if (rec.size() == 0) {
+            return;
+        }
+
+        if (! getCountTwo(rec,"09:00")){
+            mBt0900.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+        } else {
+            mBt0900.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        }
+        if (! getCountTwo(rec,"13:00")) {
+            mBt1300.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+        } else {
+            mBt1300.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        }
+        if (! getCountTwo(rec,"17:00")){
+            mBt1700.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+        } else {
+            mBt1700.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        }
+
+        if (! getCountTwo(rec,"21:00")){
+            mBt2100.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+        } else {
+            mBt2100.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        }
+
+        if (! getCountTwo(rec,"01:00")){
+            mBt0100.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+        } else {
+            mBt0100.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        }
+
+        if (! getCountTwo(rec,"05:00")){
+            mBt0500.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+        } else {
+            mBt0500.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        }
+
     }
 
 
