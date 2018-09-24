@@ -42,6 +42,7 @@
         <TextView
             android:id="@+id/expant_list_item_name2"
             tools:text="А тут надпись для тех у которых должно быть фото"
+            android:textColor="@android:color/black"
             android:layout_weight="1"
             android:layout_marginLeft="8dp"
             android:layout_gravity="center_vertical"

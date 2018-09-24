@@ -8,6 +8,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -105,6 +106,7 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                 Log.d(TAG," OAUTH :" +api.getOAthRequestUrl());
 
                 Log.d(TAG,"USER LOGIN :"+api.getUserLogin());
+               // checkLogin();
 
                 yandexFolder = "/CheckList/" + Utils.pathToData(mLongData) + "/";
                 if (api.isAuthorization()) {
@@ -112,6 +114,21 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            ArrayList<WebDavFile> filesCheck = api.getFiles("/");
+                            if (filesCheck == null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(QuestionActivity.this);
+                                        builder.setTitle("Внимание !")
+                                                .setMessage("Ошибка аудентификации")
+                                                .setNegativeButton(R.string.dialog_close,null)
+                                                .show();
+                                    }
+                                });
+                                return;
+                            }
+
                             boolean res;
                             ArrayList<WebDavFile> files = api.getFiles("/CheckList");
                             if (files != null) {
@@ -143,6 +160,12 @@ public class QuestionActivity extends AppCompatActivity implements ExpandableLis
         setupTools();
 
         actionBar.setSubtitle("Не пройдено :"+String.valueOf(countItem - checkedCount));
+    }
+
+    private void checkLogin() {
+        Log.d(TAG,"USER LOGIN :"+api.getUserLogin());
+        Log.d(TAG,"OAUTH :"+api.getOAthRequestUrl());
+
     }
 
     public void setupTools(){
