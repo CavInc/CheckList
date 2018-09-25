@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.vadel.yandexdisk.YandexDiskApi;
+import org.vadel.yandexdisk.webdav.WebDavFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -121,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    private MenuItem mLoginYa;
+    private MenuItem mLogOutYa;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (store != null) {
@@ -131,6 +135,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        mLoginYa = menu.findItem(R.id.menu_login);
+        mLogOutYa = menu.findItem(R.id.menu_logout);
+        if (mDataManager.getPrefManager().getCheckAccount()) {
+            mLoginYa.setVisible(false);
+            mLogOutYa.setVisible(true);
+        }
+
         return true;
     }
 
@@ -144,9 +155,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
         if (item.getItemId() == R.id.menu_login) {
-            LoginDialog dialog = new LoginDialog();
+            ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
+            LoginDialog dialog = LoginDialog.newInstance(loginPass.get(0),loginPass.get(1));
             dialog.setOnLoginDialogListener(mListener);
             dialog.show(getFragmentManager(),"LD");
+        }
+        if (item.getItemId() == R.id.menu_logout) {
+            mLogOutYa.setVisible(false);
+            mLoginYa.setVisible(true);
+            mDataManager.getPrefManager().setLoginPassword(null,null);
+            mDataManager.getPrefManager().setCheckAccount(false);
         }
         return true;
     }
@@ -287,13 +305,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }).start();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Внимание")
-                        .setMessage("Не включена передача данных")
-                        .setNegativeButton(R.string.dialog_close,null);
+                showNoNetwork();
             }
         }
 
+    }
+
+    private void showNoNetwork(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Внимание")
+                .setMessage("Не включена передача данных")
+                .setNegativeButton(R.string.dialog_close,null);
     }
 
 
@@ -444,13 +466,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void checkLogin(String login,String pass){
+        // проверяем можно ли зайти
+        if (mDataManager.isOnline()) {
+            if (api == null) {
+                api = new YandexDiskApi(getResources().getString(R.string.CLIENT_ID));
+            }
+            api.setTokenFromCallBackURI(getResources().getString(R.string.CALL_BACK_URL));
+            api.setCredentials(login, pass);
+            // проверяем доступность чтением файлов из YA
+            // может быть проблемма при пустом YA
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ArrayList<WebDavFile> filesCheck = api.getFiles("/");
+                    if (filesCheck == null) {
+                        // файлов нет
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setTitle("Внимание !")
+                                        .setMessage("Ошибка аудентификации")
+                                        .setNegativeButton(R.string.dialog_close,null)
+                                        .show();
+                                mLogOutYa.setVisible(false);
+                                mLoginYa.setVisible(true);
+                            }
+                        });
+                        mDataManager.getPrefManager().setLoginPassword(null,null);
+                        mDataManager.getPrefManager().setCheckAccount(false);
+                        return;
+
+                    } else {
+                        // файлы есть.
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mLoginYa.setVisible(false);
+                                mLogOutYa.setVisible(true);
+                            }
+                        });
+                        mDataManager.getPrefManager().setCheckAccount(true);
+                    }
+                }
+            }).start();
+
+        } else {
+            showNoNetwork();
+        }
+    }
+
     LoginDialog.OnLoginDialogListener mListener = new LoginDialog.OnLoginDialogListener() {
         @Override
         public void onLogin(String login, String pass) {
             if (login.length() != 0 && pass.length() != 0){
                 mDataManager.getPrefManager().setLoginPassword(login,pass);
+                checkLogin(login,pass);
             } else {
                 // TODO тут ругаемся
+
             }
         }
     };

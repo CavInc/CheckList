@@ -17,6 +17,7 @@ public class PrefManager {
     private static final String LAST_SEND_FILE = "LAST_SEND_FILE";
     private static final String WORK_DATA = "WORK_DATA";
     private static final String ALL_COUNT = "ALL_COUNT";
+    private static final String CHECK_ACCOUNT = "CHECK_ACCOUNT";
     private SharedPreferences mSharedPreferences;
 
     public PrefManager(){
@@ -79,6 +80,16 @@ public class PrefManager {
     public void setAllQuestionCount(int count){
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putInt(ALL_COUNT,count);
+        editor.apply();
+    }
+
+    public boolean getCheckAccount(){
+        return mSharedPreferences.getBoolean(CHECK_ACCOUNT,false);
+    }
+
+    public void setCheckAccount(boolean checkAccount){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(CHECK_ACCOUNT,checkAccount);
         editor.apply();
     }
 

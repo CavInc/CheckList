@@ -41,7 +41,7 @@ public class Utils {
         } catch (ParseException e) {
 
         }
-        return dateToStr("ddMMyyyy",dt);
+        return dateToStr("yyyy_MM_dd",dt);
     }
 
     public static Bitmap getPicSize(String currentImageFile,int targetW,int targetH){

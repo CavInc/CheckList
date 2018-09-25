@@ -17,10 +17,33 @@ import tk.cavinc.checklist.R;
 
 public class LoginDialog extends DialogFragment {
 
+    private static final String USER = "USER";
+    private static final String PASS = "PASS";
     private OnLoginDialogListener mOnLoginDialogListener;
 
     private EditText mLogin;
     private EditText mPasswd;
+
+    private String login = null;
+    private String pass = null;
+
+    public static LoginDialog newInstance(String name,String pass){
+        Bundle args = new Bundle();
+        args.putString(USER,name);
+        args.putString(PASS,pass);
+        LoginDialog dialog = new LoginDialog();
+        dialog.setArguments(args);
+        return dialog;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null){
+            login = getArguments().getString(USER);
+            pass = getArguments().getString(PASS);
+        }
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -28,6 +51,11 @@ public class LoginDialog extends DialogFragment {
 
         mLogin = v.findViewById(R.id.login_login);
         mPasswd = v.findViewById(R.id.login_passwd);
+
+        if (login!=null) {
+            mLogin.setText(login);
+            mPasswd.setText(pass);
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder

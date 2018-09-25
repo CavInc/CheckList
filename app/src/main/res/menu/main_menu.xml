@@ -6,4 +6,8 @@
     <item
         android:id="@+id/menu_login"
         android:title="Логин для Yandex Disk"/>
+    <item
+        android:id="@+id/menu_logout"
+        android:visible="false"
+        android:title="Выход из Yandex Disk"/>
 </menu>

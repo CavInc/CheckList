@@ -7,8 +7,8 @@ android {
         applicationId "tk.cavinc.checklist"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.3"
         resConfigs "en", "ru"
         project.ext.set("archivesBaseName", "CheckList-" + defaultConfig.versionName);
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
