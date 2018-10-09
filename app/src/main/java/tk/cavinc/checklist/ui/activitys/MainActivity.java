@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //TODO запихать в AcyncTask ?
+    //Оптавляем в Яндекс диск
     private void sendYandexDisk() throws FileNotFoundException {
 
         ArrayList<String> loginPass = mDataManager.getPrefManager().getLoginPassword();
@@ -302,9 +302,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 public void run() {
                                     Toast.makeText(MainActivity.this,
                                             "Файл оправлен в облако\n"+sendFile.getName(),Toast.LENGTH_SHORT).show();
+
+
                                 }
                             });
                             mDataManager.getPrefManager().setLastSendFile(mLongData);
+                            if (mDataManager.getPrefManager().isDeleteInStore()) {
+                                // удяляем отправленный файл
+                                mDataManager.getDB().deleteArhive(mLongData);
+                            }
                             sendFile.delete();
                         }
                     }
