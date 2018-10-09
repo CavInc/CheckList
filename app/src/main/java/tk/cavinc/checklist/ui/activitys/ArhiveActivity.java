@@ -201,6 +201,9 @@ public class ArhiveActivity extends AppCompatActivity implements AdapterView.OnI
                                     }
                                 });
                                 fileList[finalI].delete();
+                                if (mDataManager.getPrefManager().isDeleteInStore()) {
+                                    //TODO возможно тут тоже сделать удаление
+                                }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
