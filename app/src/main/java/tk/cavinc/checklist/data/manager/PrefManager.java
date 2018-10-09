@@ -93,4 +93,9 @@ public class PrefManager {
         editor.apply();
     }
 
+    // флаг о удалении
+    public boolean isDeleteInStore(){
+        return mSharedPreferences.getBoolean("delete_in_store",false);
+    }
+
 }

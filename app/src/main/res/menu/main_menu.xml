@@ -10,4 +10,7 @@
         android:id="@+id/menu_logout"
         android:visible="false"
         android:title="Выход из Yandex Disk"/>
+    <item
+        android:id="@+id/menu_setting"
+        android:title="Настройки"/>
 </menu>

@@ -35,6 +35,7 @@ import java.util.Date;
 
 import tk.cavinc.checklist.R;
 import tk.cavinc.checklist.data.manager.DataManager;
+import tk.cavinc.checklist.data.manager.PrefManager;
 import tk.cavinc.checklist.data.models.ArhiveDocModel;
 import tk.cavinc.checklist.data.models.ArhiveHeadModel;
 import tk.cavinc.checklist.data.models.CountTimeModel;
@@ -165,6 +166,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mLoginYa.setVisible(true);
             mDataManager.getPrefManager().setLoginPassword(null,null);
             mDataManager.getPrefManager().setCheckAccount(false);
+        }
+        if (item.getItemId() == R.id.menu_setting) {
+            Intent intent = new Intent(this, PrefeActivity.class);
+            startActivity(intent);
         }
         return true;
     }

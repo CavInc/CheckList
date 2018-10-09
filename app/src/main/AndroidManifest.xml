@@ -31,6 +31,10 @@
                   android:screenOrientation="portrait"
             android:label="Архивы">
         </activity>
+        <activity android:name=".ui.activitys.PrefeActivity"
+            android:label="Настройки">
+
+        </activity>
         <provider
             android:authorities="${applicationId}.provider"
             android:name="android.support.v4.content.FileProvider"
